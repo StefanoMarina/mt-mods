@@ -67,7 +67,7 @@ a mod is a json object respecting the following schema:
   "type" : _all_|_score_|string,
   "value" : number
 }
-``
+```
 
 - **type**: this may be _all_, _score_ or any [supported roll type](#srt) described in the configuration.
 - **property**: the property you want to be buffed. this does not really need to match a property, it can be a keyword or anything.
@@ -113,7 +113,7 @@ Here is the schema for effects:
     {mod}, ...
   ]
 }
-``
+```
 
 - **name** : the name of your effect:
 - **type** :this attribute is there to ease json path searching. Just like mods, you may add any other attribute you want;
@@ -246,7 +246,7 @@ This will quickly return any and all mod from a given property. mod property _mo
 [h: allMods = json.path.read(mods, "*[?(@.property)]", "ALWAYS_RETURN_LIST")]
 [h: allMods = json.merge(allMods, json.path.read(mods, "*[?(@.type=='effect')].effects.*", "ALWAYS_RETURN_LIST"))]
 [r, foreach (mod, allMods, "<br/>"): mod.toString(mod)]
-``
+```
 
 ## Usage tips
 
@@ -259,7 +259,7 @@ fields representing mod groups. Here is an example of an EquipmentMods property 
 {
   "bracelet" : [{"property" : "AC", "value": 2, "type" : "all"}]
 }
-``
+```
 
 `mod.getProperty()` will return +1 to the AC. This does not work with effects, as they are nested deeper.
 
@@ -275,7 +275,7 @@ i.e. `1d8+mod.getProperty("Strength", "mods")+mod.get(mods, "damage", "attack") 
 
 ```
 {mod.set("[]", "Attack, damage", 1, "attack")}
-``
+```
 
 A GM should resort to **custom effects** only on a last minute basis. Ensure all the most common effects are present before releasing your framework.
 
@@ -294,7 +294,7 @@ jsonpath.
 [h: mods = json.path.delete (mods, "*[?(@.source == 'bracelet')]")]
 
 [h: mods = json.append(mods, bracelets)]
-``
+```
 
 ## Macro reference
 
