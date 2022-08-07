@@ -1,0 +1,14 @@
+{
+  "name": "Lib:Mod",
+  "version": "1.0.0",
+  "website": "",
+  "gitUrl": "",
+  "authors": ["Witness1"],
+  "license": "WTFPL",
+  "namespace": "w1.lmod",
+  "description": "LibMod allows certain d20 operations such as raw stat to modifier (ie. 15=>+1), and management of modifiers, buffs and effects.",
+  "shortDescription": "LibMod is a library for buff and effect handling.",
+  "allowsUriAccess": true,
+  "licenseFile": "LICENSE.TXT",
+  "readMeFile": "README.md"
+}
