@@ -59,7 +59,7 @@ This is for internal use only and may be deprecated in the future. basically, re
 ```
 effect.add(jarr[], fx)
 effect.add(jarr[], fx, replace=0)
-``
+```
 
 Stores into `jarr` a new effect, either retrieving it from the global database or by creating from scratch.
 
@@ -87,7 +87,7 @@ The expanded `jarr` array.
 Utility to check an effect presence on a json narray.
 ```
 effect.contains(jarr, effectName)
-``
+```
 
 ##### Parameters
 
@@ -108,7 +108,7 @@ json path search is case-sensitive, so _bless_ is different from _Bless_. Same f
 ```
 	effect.get(name)
 	effect.get(name, jarr[])
-``
+```
 
 returns a json object from jarr with all modifiers present for an effect. If an effect has multiple entries, all entries are returned.
 
@@ -152,7 +152,7 @@ a json array with all the effects returned.
 effect.new(name)
 effect.new(name, state)
 effect.new(name, state, effects[], group)
-``
+```
 
 Creates a new effect json object.
 
@@ -176,7 +176,7 @@ a new json effect object .
 
 ```
 effect.remove(jarr, name, tokenID)
-``
+```
 
 Removes an effect. Note that this will remove ALL effects with that name.
 
@@ -196,7 +196,7 @@ modified jarr.
 ```
 effect.ui.manage()
 effect.ui.manage(tok, prop, title="Effect Manager", access="auto", group)
-``
+```
 
 This function opens a GUI editor to manage mods. This function may open the global effect library to the GM, if no selection is made, a specific editor to a _jarray_ or may show in bulk a mod property to a list of tokens (comma separated).
 
@@ -222,7 +222,7 @@ This GUI will prevent any unauthorized access to token properties. GM may edit a
 
 ```
 mod.get(jarr[], name,type="all", otherwise=0)
-``
+```
 
 Gets the current mod for current token or token id. 0 is returned by default is the mod is not present. _type_ determines the mod category.
 
@@ -252,7 +252,7 @@ Find any bonus to thac0:
 
 ```
 mod.getProperty(property, modProperty[], scope="all", token="currentToken()", map="currentMap()")
-``
+```
 
 Returns a property with all modifications applied. Property is first converted with _mod.getScore_, then modified by a _mod.get_call using _scope_.
 
@@ -279,7 +279,7 @@ A numerical value.
 ```
 mod.getScore(prop, jarr="")
 mod.getScore(prop, jarr="", tokenID=currentToken, map=getCurrentMap())
-``
+```
 
 Gets, modifies and return a property bound as a score. searches for a table with `name` and gets the actual bonus/modifier. If it is not present, the raw value is returned.
 
@@ -309,7 +309,7 @@ Let's assume you have bound the Strength property to a 3.5 table, so 12=>+1, 18=
 ```
 [h: setProperty("STR", 18)]
 [r: mod.getScore("STR", "")]
-``
+```
 
 will return 3. Get the STR modifier, use the 'mods' property:
 
@@ -319,7 +319,7 @@ will return 3. Get the STR modifier, use the 'mods' property:
 ### mod.set
 ```
 	mod.set(jarr[], properties, value, scope="all", replace=1)
-``
+```
 ##### Parameters
 
 * `jarr[]`: a json array with other mods. if null (""), the plain object will be returned.
@@ -367,7 +367,7 @@ Just create a "+1 to Strength and Intelligence saves" mod:
 
 ```
 mod.setEffect(effect, value, property, tokenID=currentToken, map=getCurrentMapName())
-``
+```
 
 Sets an effect mimicking the setState function.
 
@@ -398,7 +398,7 @@ Returns 1 if the operation was possibile (the effect wasn't present before addin
 
 ```
 mod.string(mod{})
-``
+```
 
 Turns a mod object into a human readable string.
 
@@ -424,7 +424,7 @@ This function will call the _Score to table_ bind editor.
 mod.ui.edit(mod)
 mod.ui.edit(jarr)
 mod.ui.edit(jarr, index)
-``
+```
 
 Graphical editor for a mod.
 
