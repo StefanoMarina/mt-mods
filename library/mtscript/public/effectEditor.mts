@@ -4,10 +4,8 @@
 [h, if (!json.contains(args, "effect")): effect = effect.new("New effect")]
 [h, if (!json.contains(args, "tokenID")): tokenID ="##lib##"]
 
-[h: LOCATION = getMacroLocation()]
-
-[h: rollTypes = listAppend("all, score", getLibProperty("supportedRolls",LOCATION))]
-[h: statesList = getLibProperty("statesList", LOCATION)]
+[h: rollTypes = listAppend("all, score", getLibProperty("supportedRolls"))]
+[h: statesList = getLibProperty("statesList")]
 
 [h, if (listCount(statesList)>0): 
 	htmlStatesOptions = "<option default selected value=''>Select a state</option>"+listFormat(statesList, "%list", "<option value='%item'>%item</option>","");
@@ -21,12 +19,12 @@
 
 [h: OPTIONLIST = listFormat(rollTypes, "%list", "<option value='%item'>%item</option>","")]
 
-[h: eventLink = macroLinkText("effectEditorUpdate@"+getMacroLocation())]
+[h: eventLink = macroLinkText("effectEditorUpdate@this")]
 		
 [dialog5("Effect editor", "width=600; height=400; title=Effect editor;input=1"):{
 <html>
 	<head>
-	[r, macro("printCSS@"+getMacroLocation()):""]
+	[r, macro("printCSS@this"()):""]
 	[r, if (getLibProperty("cssOnly") != 0): '
 	<style>
 		input { background-color: transparent; border: none; border-bottom: 1px solid black; width: 100%; padding: 3px; margin: 0 }
@@ -169,3 +167,4 @@
 	</body>
 </html>
 }]
+

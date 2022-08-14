@@ -4,7 +4,7 @@
 [h, if (argCount()>4): group = arg(4); group ="all")]
 
 [h, if (!argCount() && isGM()), code: {
-	[macro("effectsLibrary@"+getMacroLocation()): ""]	
+	[macro("effectsLibrary@this"): ""]	
 	[abort(0)]
 }]
 
@@ -21,4 +21,4 @@
 }]
 
 [h: params = json.set(params, "title", title, "property", arg(1), "access", access, "group", group)]
-[h, macro("effectsTokenManager@"+getMacroLocation()): params]
+[h, macro("effectsTokenManager@this"): params]
