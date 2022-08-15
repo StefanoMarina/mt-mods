@@ -277,8 +277,8 @@ A numerical value.
 ### mod.getScore
 
 ```
-mod.getScore(prop, jarr="")
-mod.getScore(prop, jarr="", tokenID=currentToken, map=getCurrentMap())
+mod.getScore(prop, propertyMod[]="")
+mod.getScore(prop, propertyMod[]="", tokenID=currentToken, map=getCurrentMap())
 ```
 
 Gets, modifies and return a property bound as a score. searches for a table with `name` and gets the actual bonus/modifier. If it is not present, the raw value is returned.
@@ -286,7 +286,7 @@ Gets, modifies and return a property bound as a score. searches for a table with
 ##### Parameters
 
 * `prop`: the **name** of the property you want to change.
-* `jarray` : a json array with pure "score" mods. Pass empty string to avoid ("").
+* `propertyMod` : a json array with pure "score" mods. Pass empty string to avoid (""). If you pass a non empty-string, `getProperty` with `tokenID` as target will be called.
 * `tokenID` : the token, if different from the current token;
 * `map` : where to find `tokenID`, if specified.
 
