@@ -1,4 +1,4 @@
-[h: jarr = arg(0)]
+[h: jarr = effect.resolve(arg(0))]
 [h: modName = arg(1)]
 [h, if (argCount()>2): modType = arg(2); modType = "all"]
 [h, if (argCount()>3): otherwise = arg(3); otherwise = 0]
@@ -8,7 +8,7 @@
 
 [h: query= strformat(query)]
 
-[h: propQuery= strformat("[?(@.property in ['all','%{modName}'] && %{query})].value")]
+[h: propQuery= strformat(".[?(@.property in ['all','%{modName}'] && %{query})].value")]
 
 [h: propMods = json.path.read(jarr, "*"+propQuery, "ALWAYS_RETURN_LIST")]
 [h: fxMods = json.path.read(jarr, strformat("*.effects.*%{propQuery}"), "ALWAYS_RETURN_LIST")]
@@ -22,4 +22,5 @@
 [h: exp = replace(exp, "\\+\\-", "-")]
 
 [h: macro.return = eval(string(exp))]
+
 

@@ -7,8 +7,8 @@
 
 
 [h: defineFunction("effect.add", strformat("effect.add@%{NAMESPACE}"), 1)]
+[h: defineFunction("effect.asReference", strformat("effect.asReference@%{NAMESPACE}"), 1)]
 [h: defineFunction("effect.contains", strformat("effect.contains@%{NAMESPACE}"), 1)]
-
 [h: defineFunction("effect.get", strformat("effect.get@%{NAMESPACE}"), 1)]
 [h: defineFunction("effect.group", strformat("effect.group@%{NAMESPACE}"), 1)]
 [h: defineFunction("effect.new", strformat("effect.new@%{NAMESPACE}"), 1)]
@@ -18,6 +18,7 @@
 [h: defineFunction("mod.get", strformat("mod.get@%{NAMESPACE}"), 1)]
 [h: defineFunction("mod.getProperty", strformat("mod.getProperty@%{NAMESPACE}"), 1)]
 [h: defineFunction("mod.getScore", strformat("mod.getScore@%{NAMESPACE}"), 1)]
+[h: defineFunction("effect.resolve", strformat("effect.resolve@%{NAMESPACE}"), 1)]
 [h: defineFunction("mod.setEffect", strformat("mod.setEffect@%{NAMESPACE}"), 1)]
 [h: defineFunction("mod.set", strformat("mod.set@%{NAMESPACE}"), 1)]
 [h: defineFunction("mod.toString", strformat("mod.toString@%{NAMESPACE}"), 1)]
