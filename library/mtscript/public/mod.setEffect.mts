@@ -7,19 +7,24 @@
 [h: prop = getProperty(property, tokenID, map)]
 [h, if (prop == ""): prop = "[]"; assert(json.type(prop)=="ARRAY", "mod.setEffect: bad property type.")]
 
-
 [h: contains = -1]
 
 [h, if (json.type(fx)=="UNKNOWN"), code: {
 	[if (value): 
-		fx = effect.get(fx);
-		fx = effect.get(fx, prop)
+		fx = effect.get(fx, 0); 
+		fx = effect.get(fx, 0, prop)
 	]
 };{}]
 
-[h, if (json.type(fx) == "ARRAY"), code: {
-	[return(json.length(fx)>0, 0)]
-	[fx = json.get(fx, 0)]
+[h: '<!-- resolve any reference -->']
+[h: rfx = effect.resolve(fx)]
+
+[h: log.debug(string(fx))]
+[h: log.debug(string(rfx))]
+
+[h, if (json.type(rfx) == "ARRAY"), code: {
+	[return(json.length(rfx)>0, 0)]
+	[rfx = json.get(rfx, 0)]
 }]
 
 [h: fxname = json.get(fx, "name")]
@@ -32,7 +37,7 @@
 
 [h: setProperty(property, prop, tokenID, map)]
 
-[h: state = json.get(fx, "state")]
+[h: state = json.get(rfx, "state")]
 [h, if (state != ""): setState(state, value, tokenID, map)]
 
 [h: macro.return = if (contains && value, 0, 1)]
