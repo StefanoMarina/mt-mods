@@ -1,4 +1,3 @@
-
 [h: args = macro.args]
 [h: tokenID = json.get(args, "tokenID")]
 [h: property = json.get(args, "property")]
@@ -26,6 +25,8 @@
 
 [h: fxdata = "{}"]
 [h: fxnames = json.unique(fxnames)]
+
+[h: fxes = effect.resolve(fxes)]
 
 [h, foreach (fxentry, fxnames), code: {
 	[fxelements = json.path.read(fxes, strformat("*[?(@.type == 'effect' && @.name == '%{fxentry}')].effects.*"), "ALWAYS_RETURN_LIST")]
@@ -94,6 +95,9 @@
 			[r, foreach (name, libFxnames, "</option>"): strformat("<option value='%{name}'>%{name}")]
 			</select>
 		</td>
+	</tr>
+	<tr>
+	<td colspan="2"><label for="chkRef"><input name="addAsReference" id="chkRef" type="checkbox" value="1" checked>Add effect as reference</label></td>
 	</tr>
 	</table>
 	};{}]
