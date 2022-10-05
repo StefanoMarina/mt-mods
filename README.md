@@ -75,7 +75,6 @@ a mod is a json object respecting the following schema:
 
 Of course, being a json object, you may add any other field you want.
 
-
 ### Useful macros
 
 use ``mod.set`` to create a mod and store it on an array, ``mod.get`` to find how much buff the property has.
@@ -147,6 +146,22 @@ There is an _access_ parameter to``effect.ui.manage`` that allows you to select 
 ``mod.setEffect()`` is the main function here. This will take an existing effect (either an object or a name from the database), and will handle status enabling/disabling for you, should the effect be bind to a state. 
 
 ``effect.new()`` is to be preferred to json.set as it will ensure the effect object is schema-compatible. ``effect.add`` and ``effect.remove`` will handle multiple entries, by forcing replacing or stack. ``effect.get``, ``effect.contains`` and ``effect.group`` are useful for queries. 
+
+## Effect reference
+
+An **effect reference** is a simple json object that points to a dabatase effect instead of containing all the information. Now, why such thing would exists? Simple: to handle global effect changes. Let's say you want to use your ~~rac~~ archetype modifiers as effects, and add them to a token instead of modifying each stat every time. Now imagine you misspelled something, or simply want to add another feature. With effect reference, you only need to change a global effect - all other effect will change automatically.
+
+```json
+{
+  "name" : name of the effect - can be different than the reference
+  "ref" : name of the effect which this object refers to.
+}
+```
+
+### Useful macros
+``effect.asReference`` will create a json object with your reference, while ``effect.resolve`` will resolve any json array or reference towards a database. note that ``mod.get`` and ``effect.remove`` already call ``effect.resolve`` towards the global database.
+
+
 
 ## Cookbook
 

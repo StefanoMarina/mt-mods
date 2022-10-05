@@ -23,6 +23,8 @@ When a parameter has a =_something_ , i.e. `token=currentToken()`, this means th
 
 ### Effect macros
 
+[effect.asReference](#effect.asReference)
+
 [effect.add](#effect.add)
 
 [effect.contains](#effect.contains)
@@ -34,6 +36,8 @@ When a parameter has a =_something_ , i.e. `token=currentToken()`, this means th
 [effect.new](#effect.new)
 
 [effect.remove](#effect.remove)
+
+[effect.resolve](#effect.resolve)
 
 [effect.ui.manage](#effect.ui.manage)
 
@@ -81,6 +85,25 @@ The name property is used to look inside the general DB when `effects` is not se
 
 The expanded `jarr` array.
 
+<a id="effect.asReference"></a>
+### effect.asReference(fxName)
+
+A wrap-up to create an _effect reference_ to a global effect. This ensures object integrity.
+
+##### Parameters
+
+*   fxName: name of the global effect
+
+##### Remarks
+
+This creates an effect reference to a global effect instead of a real effect, meaning the array must be resolved againt references before retrieving all mods. this is done automatically by `mod.get`, see `effect.resolve` for more info.
+
+json path search is case-sensitive, so `bless` is different from `Bless`. Same for any properties.
+
+##### Returns
+
+a json _Effect reference_ object.
+
 <a id="effect.contains"></a>
 ### effect.contains
 
@@ -107,23 +130,30 @@ json path search is case-sensitive, so _bless_ is different from _Bless_. Same f
 ### effect.get
 ```
 	effect.get(name)
-	effect.get(name, jarr[])
+	effect.get(name, index = -1)
+	effect.get(name, index = -1, jarr\[\])
 ```
 
-returns a json object from jarr with all modifiers present for an effect. If an effect has multiple entries, all entries are returned.
+Returns a json list of effects matching `name`. If an effect has multiple entries, all entries are returned.
 
 ##### Parameters
 
-* name: effect name.
-* jarr : array where to look up for `name`. If not specified, the global DB is searched instead.
+*   name: effect name.
+*   jarr : array where to look up for `name`. If not specified, the global DB is searched instead.
+*   index : which effect from the list. defaults to -1, which means the whole array will be returned. Set it to 0 to avoid returning an array when you are sure only one effect is present (for example, when querying the database).
 
 ##### Remarks
 
-json path search is case-sensitive, so _bless_ is different from _Bless_. Same for any properties.
+json path search is case-sensitive, so _bless_ is different from _Bless_.
+
+Despite being called effect.get, this returns a json array, even if a single instance is found. If you are sure only one index is present, always set index to 0.
+
+Same for any properties.
 
 ##### Returns
 
-a json array with all the effects returned.
+a json array or a json object with all the effects returned.
+
 
 <a id="effect.group"></a>
 ### effect.group
@@ -189,6 +219,32 @@ Call mod.updateStatuses() to enable/disable statuses for a mod. if tokenID is sp
 ##### Returns
 
 modified jarr.
+
+<a id="effect.resolve"></a>
+### Effect.resolve
+
+effect.resolve(jarr)
+effect.resolve(jarr, database = "")
+effect.resolve(reference)
+effect.resolve(reference, database = "")
+
+Resolves any effect reference in the jarray.
+
+##### Parameters
+
+*   `jarray`: if the first parameter is a valid json mod/fx array, the whole array will be resolved;
+*   `reference`: if the first paramater is a valid effect reference json object, only that object will be resolved.
+*   `database`: optional, the database to use for reference resolution, if "" it will be the global database.
+
+##### Remarks
+
+This function is called automatically by mod.get but may be called by any functions that requires a full parse-able db.
+
+
+##### Returns
+
+A json array with all references turned into a full effect object.
+
 
 <a id="effect.ui.manage"></a>
 ### effect.ui.manage
@@ -267,7 +323,9 @@ Returns a property with all modifications applied. Property is first converted w
 
 json path search is case-sensitive, so _bless_ is different from _Bless_. Same for any properties.
 
-this will automatically convert any score into their mods. scope cannot be 'score'. if you want to get the pure attribute, do getProperty(property)+mod.get(property, "score").
+This will automatically convert any score into their mods. scope cannot be 'score'. if you want to get the pure attribute, do getProperty(property)+mod.get(property, "score").
+
+Note that this resolves the effect array towards the global database. If you need prior resolution towards a different database, call [effect.resolve] before calling this.
 
 ##### Returns
 
