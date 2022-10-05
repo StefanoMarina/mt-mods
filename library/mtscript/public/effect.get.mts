@@ -4,7 +4,6 @@
 
 [h, if (index = -1):
 	macro.return = json.path.read(jarr, strformat("*[?(@.name == '%{fxname}' && @.type=='effect')]", "ALWAYS_RETURN_LIST"));
-	macro.return = json.get( json.path.read(jarr, strformat("*[?(@.name == '%{fxname}' && @.type=='effect')]", "ALWAYS_RETURN_LIST, SUPPRESS_EXCEPTIONS")) , index)
+	macro.return = json.get( json.path.read(jarr, strformat("*[?(@.name == '%{fxname}' && @.type=='effect')]", "ALWAYS_RETURN_LIST")) , 0)
 ]
 		
-
