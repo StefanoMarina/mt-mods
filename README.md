@@ -24,7 +24,7 @@ Despite being low-level, simple GUI management is included, in the form of dialo
 - Lib:Token: just add the token on your campaign, impersonate and press ``onCampaignLoad`` or save/reload the campaign.
 - Add-on (Experimental): add the addon .zip file via the file menu, and cross your fingers. clone this repo and do the necessary changes if necessary.
 
-**IMPORTANT** As of now (1.11) add-ons are considered not stable for gameplay. I **strongly** suggest you start with the drag'n'drop token library, and
+**IMPORTANT** At the time I write this (october 2022), add-ons are considered not stable for gameplay. I **strongly** suggest you start with the drag'n'drop token library, and
 move to the add-on when it is more stable. Also, There are probably a lot of bugs still to be found out in the addon version.
 
 If you are cloning this repo, zip all files (root dir as zip root dir) to create an add-on. 
@@ -40,13 +40,12 @@ Any String List you will stumble upon is comma-separated, no option for custom l
  
 - **CSS**: you can embed css files/macro into the dialogs. add the macros in _macro@lib_ format.
 - **Use internal CSS** (default: yes) : you may force-removal any of the css present. This will mess the dialogs. But who knows, maybe you need it.
-- **State bind**: you may bind an effect to a Status, so that when you add an effect to a token the status is automatically set. Until a getAllStates() or getAllStatuses() function is provided by the supreme maptool overlords, you have to enter your Status list manually.
 - <a id="srt"><a>**Supported rolls**: sometimes you want to give +1 to a check, sometimes you want to give it only to a saving throw. The already present roll types are simple suggestions. _all_ is reserved to skip roll type, while _score_ is used to elaborate between _score buffs_ (i.e. 15+1=16) from _roll buffs_) (i.e.12=+1+, henche +2 ).
 - **Effect groups**: You may create groups here, this will help sorting effects or even placing limits (i.e. 2E only allows 1 magical effect to any mod).
 
 ### Suitable properties
 
-Now, where to store your mods and effects? you may use any property you want. a **Mod property** is expected to be a **json array** (``[]``), but with
+Now, where to store your mods and effects? you may use any property you want. a **Mod property** is expected to be a **json array** (`[]`), but with
 some experimentation they can be put anywhere.
 
 ### Database
@@ -169,7 +168,7 @@ An **effect reference** is a simple json object that points to a dabatase effect
 
 We'll use default settings for roll types.
 
-We will create a mod property. Do "Edit > Campaign preferences" and add a new property, "mods", with a default value of \[\].
+We will create a mod property. Do "Edit > Campaign preferences" and add a new property, "mods", with a default value of `[]`.
 
 `mods : []`
 
