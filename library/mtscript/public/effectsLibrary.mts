@@ -3,32 +3,38 @@
 
 [h: selection = -1]
 
-[h, if (json.length(allEffects) >0): 
-	fxQuery = "selection|"+json.toList(json.path.read(allEffects, "*.name")) + "|Edit/Remove Effect|LIST";
-	fxQuery ="jnk||LABEL"
-]
+[h: list = "Create new effect,Edit an effect,Remove an effect"]
+
+[h, if (json.length(allEffects) >0), code: {
+	[fxQuery = "selection|"+json.toList(json.path.read(allEffects, "*.name")) + "|Edit/Remove Effect|LIST"]
+};{
+	[fxQuery ="jnk|<html><i>No effects in the database found.</i>||LABEL|SPAN=TRUE"]
+	[list = listGet(list,0)]
+}]
+
 
 [h: res = input(
 	"jnk|<html><b>What do you want to do?||LABEL|SPAN=TRUE",
-	"action|Create new effect, Edit an effect, Remove an effect|Select action|RADIO",
+	strformat("action|%{list}|Select action|RADIO|VALUE=STRING"),
 	fxQuery)
 ]
 
 [h: abort(res)]
 
 [h, switch (action), code:
-	case 0: {
+	case "Create new effect": {
 		[effect = json.set("{}", "name", "new effect", "type", "effect", "effects", "[]")]
 		[macro("effectEditor@"+getMacroLocation()): json.set("{}", "effect", effect, "tokenID", "##lib##")]
 	};
-	case 1: {
+	case "Edit an effect": {
 		[effect = json.get(allEffects, selection)]
 		[macro("effectEditor@"+getMacroLocation()): json.set("{}", "effect", effect, "replaces", selection,
 			"tokenID", "##lib##")]
 	};
-	case 2: {
+	case "Remove an effect": {
 		[assert (selection > -1, "No effect available.")]
 		[setLibProperty("effectsDB", json.remove(allEffects, selection))]
 	};
 	default: {}
 ]
+
