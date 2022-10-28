@@ -26,4 +26,7 @@
 [h: defineFunction("mod.ui.edit", strformat("mod.ui.edit@%{NAMESPACE}"), 1)]
 [h: defineFunction("printCSS", strformat("printCSS@%{NAMESPACE}"), 1)]
 
-[r, g: "<p><em>Lib:Mod 1.0 <b>Loaded</b></p>."]
+[h: defineFunction("mod.pvt.getAllStates", strformat("mod.pvt.getAllStates@%{NAMESPACE}"), 1)]
+
+[h: broadcast("<p><i>Lib:Mod 1.0 <b>loaded</b>.</i></p>", "gm")]
+

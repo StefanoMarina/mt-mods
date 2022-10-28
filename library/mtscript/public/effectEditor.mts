@@ -5,7 +5,8 @@
 [h, if (!json.contains(args, "tokenID")): tokenID ="##lib##"]
 
 [h: rollTypes = listAppend("all, score", getLibProperty("supportedRolls"))]
-[h: statesList = getLibProperty("statesList")]
+[h: statesList = mod.pvt.getAvailableStates()]
+
 
 [h, if (listCount(statesList)>0): 
 	htmlStatesOptions = "<option default selected value=''>Select a state</option>"+listFormat(statesList, "%list", "<option value='%item'>%item</option>","");

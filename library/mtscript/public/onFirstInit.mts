@@ -1,5 +1,6 @@
-[h: setLibProperty("version", 100)]
-[h: vars = "statesList, cssList, groupsList"]
+[h: '<!-- this will reset the whole library! -->']
+[h: setLibProperty("version", 103)]
+[h: vars = "cssList, groupsList"]
 
 [h, foreach (var, vars): setLibProperty(var, "")]
 
