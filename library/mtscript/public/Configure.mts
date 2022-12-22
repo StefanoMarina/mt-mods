@@ -53,4 +53,3 @@
 [h, foreach (v, vars): setLibProperty(v, json.get(jobj, v))]
 
 [h, if (action == 1): execLink (macroLinkText("openDatabase@this", "self"))]
-

@@ -1,3 +1,4 @@
+
 [h: args = macro.args]
 [h: tokenID = json.get(args, "tokenID")]
 [h: property = json.get(args, "property")]

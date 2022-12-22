@@ -13,4 +13,4 @@
 	[h, if (jarr != ""): jarr = json.append(jarr, newModObject); macro.return = newModObject]
 }]
 
-[h, if (jarr != ""):macro.return = jarr]
+[h, if (jarr != ""): macro.return = jarr]

@@ -1,7 +1,6 @@
 [h: jarr = arg(0)]
 [h, if (argCount()>1): database = arg(1); database = getLibProperty("effectsDB", getMacroLocation())]
 
-
 [h, if (json.type(jarr)=="ARRAY"), code: {
 	[h: refs = json.path.read(jarr, "*[?(@.type=='effect' && @.ref)]", "ALWAYS_RETURN_LIST, AS_PATH_LIST, SUPPRESS_EXCEPTIONS")]
 	[h: return (!json.isEmpty(refs), jarr)]
@@ -21,7 +20,10 @@
 	}]
 	[h: macro.return = jarr]
 };{
- [h: macro.return = effect.get(json.get(jarr, "ref"), 0, database)]
+	[h, if (json.contains(jarr, "ref")):
+ 		macro.return = effect.get(json.get(jarr, "ref"), 0, database);
+ 		macro.return = jarr
+ 	]
 }]
 
 

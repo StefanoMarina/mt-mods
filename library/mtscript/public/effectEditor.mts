@@ -7,7 +7,6 @@
 [h: rollTypes = listAppend("all, score", getLibProperty("supportedRolls"))]
 [h: statesList = mod.pvt.getAvailableStates()]
 
-
 [h, if (listCount(statesList)>0): 
 	htmlStatesOptions = "<option default selected value=''>Select a state</option>"+listFormat(statesList, "%list", "<option value='%item'>%item</option>","");
 	htmlStatesOptions  = ""
@@ -168,4 +167,3 @@
 	</body>
 </html>
 }]
-

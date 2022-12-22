@@ -6,6 +6,7 @@
 [h: arglen = argCount()]
 
 [h, if (json.type(fxArg) == "UNKNOWN"), code: {
+	[h: fxname = fxArg]
 	[h: fxlib = getLibProperty("effectsDB", getMacroLocation())]
 	[h, if (json.type(fxlib) !="ARRAY"): fxlib = "[]"]
 

@@ -1,1 +1,1 @@
-attack, check, damage, save
+attack,check,damage,save,domainCheck

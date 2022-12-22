@@ -1,0 +1,1 @@
+[{"prop":"Blood","table":"Blood"},{"prop":"STR","table":"attribs"},{"prop":"DEX","table":"attribs"},{"prop":"CON","table":"attribs"},{"prop":"INT","table":"attribs"},{"prop":"WIS","table":"attribs"},{"prop":"CHA","table":"attribs"}]

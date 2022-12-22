@@ -1,7 +1,0 @@
-prop_29.txt => effectsDB
-prop_30.txt => statesList
-prop_31.txt => groupsList
-prop_32.txt => version
-prop_33.txt => supportedRolls
-prop_34.txt => cssOnly
-prop_35.txt => cssList
