@@ -297,14 +297,14 @@ sub exposureGeneration
   
   my $macroRegex = "";
   foreach (@list) {
-    #print $_."\n";
+    
     $showOutput = $config{'defaultShowOutput'};
  
     if ($_ =~ /[\\\/]+([^\/]+)\.mts$/) {
       $showOutput = 0 if $checkOutput && any {/$macroName/} $config{'showOutput'};
       
       $macroName = $1;
-      
+      next if $macroName eq "export";  
       next if (@excludes > 0 && grep (/^$macroName$/, @excludes));
       next if (@includes > 0 && !grep (/^$macroName$/, @includes));
          
