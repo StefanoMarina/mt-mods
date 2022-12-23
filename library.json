@@ -1,16 +1,16 @@
 {
-   "website" : "https://github.com/StefanoMarina/mt-mods",
+   "shortDescription" : "LibMod is a library for buff and effect handling.",
+   "namespace" : "w1.lmod",
+   "readMeFile" : "README.md",
+   "version" : "1.1.0",
+   "description" : "LibMod allows certain d20 operations such as raw stat to modifier (ie. 15=>+1), and management of modifiers, buffs and effects.",
+   "allowsUriAccess" : true,
    "authors" : [
       "Witness1"
    ],
-   "version" : "1.1.0",
-   "gitUrl" : "https://github.com/StefanoMarina/mt-mods.git",
-   "name" : "Lib:Mod",
-   "readMeFile" : "README.md",
-   "description" : "LibMod allows certain d20 operations such as raw stat to modifier (ie. 15=>+1), and management of modifiers, buffs and effects.",
-   "allowsUriAccess" : true,
-   "license" : "WTFPL",
    "licenseFile" : "LICENSE.TXT",
-   "namespace" : "w1.lmod",
-   "shortDescription" : "LibMod is a library for buff and effect handling."
+   "gitUrl" : "https://github.com/StefanoMarina/mt-mods.git",
+   "website" : "https://github.com/StefanoMarina/mt-mods",
+   "license" : "WTFPL",
+   "name" : "Lib:Mod"
 }

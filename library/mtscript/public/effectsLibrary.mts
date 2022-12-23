@@ -3,18 +3,16 @@
 
 [h: selection = -1]
 
-[h, if (json.length(allEffects) >0): 
-	fxQuery = "selection|"+json.toList(json.path.read(allEffects, "*.name")) + "|Edit/Remove Effect|LIST";
-	fxQuery ="jnk||LABEL"
-]
+[h, if (json.length(allEffects) >0), code: {
+	[actionQuery = 	"action|Create new effect, Edit an effect, Remove an effect|Select action|RADIO"]
+	
+	[fxQuery = "selection|"+json.toList(json.path.read(allEffects, "*.name")) + "|Edit/Remove Effect|LIST"]
+}; {
+	[actionQuery = 	"action|Create new effect|Select action|RADIO"]
+	[fxQuery ="jnk|<html><i>No effects available</i>.||LABEL|SPAN=TRUE"]	
+}]
+[h: abort (input("jnk|<html><b>What do you want to do?||LABEL|SPAN=TRUE",actionQuery,fxQuery) )]
 
-[h: res = input(
-	"jnk|<html><b>What do you want to do?||LABEL|SPAN=TRUE",
-	"action|Create new effect, Edit an effect, Remove an effect|Select action|RADIO",
-	fxQuery)
-]
-
-[h: abort(res)]
 
 [h, switch (action), code:
 	case 0: {

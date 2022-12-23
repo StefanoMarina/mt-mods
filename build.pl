@@ -17,8 +17,25 @@ use Cwd 'abs_path';
 
 my ($SOURCE_DIR, $DEST_DIR, $ACTION, %args);
 
+
+  my $USAGE = '
+  Usage:
+  build.pl [-n] source_path [-vfh] [-p] action
+  
+  source_path : path with exported add-on
+  -v          : verbose
+  -n          : no source path
+  -f          : force refreshing
+  -p          : custom destination path (cwd is assumed otherwise), 
+                needs project.json.
+  action      : action
+  
+  Available actions:
+  make        : builds a zip file into "dist" directory
+';
+
 #
-# compare 2 arrays
+# compare 2 files
 #
 
 sub get_file_checksum {
@@ -47,25 +64,11 @@ sub readFile {
 #
 sub readCommandLine {
   $DEST_DIR = abs_path(getcwd());
-  
   %args = ();
-  
-  my $USAGE = '
-  \nUsage:
-  \nbuild.pl source [-v] [-p] action
-  \n
-  \nsource      : path with exported add-on
-  \n-v          : verbose
-  \n-f          : force refreshing
-  \n-p          : custom path (cwd is assumed otherwise), needs project.json.
-  \naction      : action
-  \n\nAvailable actions:
-  \nmake        : builds a zip file into "dist" directory
-';
 
   die $USAGE if @ARGV == 0;
   
-  $SOURCE_DIR = $ARGV[0];
+  #$SOURCE_DIR = $ARGV[0] if ! grep (/\^-n$/, @ARGV);
   
   #map any -key
   for (my $i = 0; $i < @ARGV; $i++) {
@@ -77,19 +80,20 @@ sub readCommandLine {
     }
     
     #set up flags
-    if ($ARGV[$i] =~ /\^-[vf]+/) {
-      for my $j (1..length($ARGV[$i])-1){
-        my $char = "-".substr($ARGV[$j], $j, 1);
+    if ($ARGV[$i] =~ /\-[vnf]+/) {
+      for my $j (1..length($ARGV[$i])-1){        
+        my $char = "-".substr($ARGV[$i], $j, 1);
         $args{$char} = 1;
       }
     }
     
-    #verb
-    $ACTION = lc $ARGV[$i];
+    #either verb or source path
+    if (defined $SOURCE_DIR) {
+      $ACTION = lc $ARGV[$i];
+    } else {
+      $SOURCE_DIR = $ARGV[$i];
+    }
   }
-  
-
-  #$ACTION = lc $args{'verb'} if exists $args{'verb'};
   
 	return 0;
 }
@@ -98,12 +102,16 @@ sub readCommandLine {
 # map_converter
 # converts a directory using a map file
 #
+
 sub map_converter {
   my %options = %{$_[0]};
   my $macroExtension = $_[1];
   #my (%options, $macroExtension) = @_;
   
-  my $sourcePath = catdir($SOURCE_DIR, $options{'folder'});
+  my $sourcePath = (exists $options{'sourceFolder'} )
+        ? catdir($SOURCE_DIR, $options{'sourceFolder'})
+        : catdir($SOURCE_DIR, $options{'folder'});
+        
   my $destPath = catdir($DEST_DIR, $options{'folder'});
   my $sourceMap = catfile($SOURCE_DIR, $options{'map'});
   
@@ -123,9 +131,11 @@ sub map_converter {
   my $wasPropFileUpdated = 0;
   
   my @result = ();
+  
   #
   # Read properties file 
   #
+  
   if ($updateProperties) {
       %propertiesFile = %{from_json(readFile(catfile($SOURCE_DIR, "mts_properties.json")))};
       @props = @{$propertiesFile{'properties'}};
@@ -144,9 +154,9 @@ sub map_converter {
               : ();
   
   if (exists $args{'-v'}) {
-    print ("Will only consider " . join(",", @includes) . "\n") if $#includes > 0;
-    print ("Going to ignore " . join(",", @excludes) . "\n") if $#excludes > 0;
-    print "No inclusion/exclusion rules.\n " if ($#includes+$#excludes) == 0;
+    print ("Will only consider " . join(",", @includes) . "\n") if @includes > 0;
+    print ("Going to ignore " . join(",", @excludes) . "\n") if @excludes > 0;
+    print "No inclusion/exclusion rules.\n " if (@includes+@excludes) == 0;
   }
 
   my ($res, $line, $rxSource, $rxDest, $fname, $propFound);
@@ -244,6 +254,7 @@ sub updateFile {
   print "OK\n";
 }
 
+
 #
 # exposureGeneration
 # generate auto exposure for all macros
@@ -262,8 +273,7 @@ sub exposureGeneration
   my @excludes = (exists ($config{'exclude'}))
               ? @{$config{'exclude'}} 
               : ();
-  
-  
+
   # add any event mts to exclude list
   if (exists $config{'events'}){
     my @events = @{$config{'events'}{'events'}};
@@ -304,7 +314,7 @@ sub exposureGeneration
       $showOutput = 0 if $checkOutput && any {/$macroName/} $config{'showOutput'};
       
       $macroName = $1;
-      next if $macroName eq "export";  
+      next if $macroName eq "export";
       next if (@excludes > 0 && grep (/^$macroName$/, @excludes));
       next if (@includes > 0 && !grep (/^$macroName$/, @includes));
          
@@ -342,10 +352,13 @@ Written with no guarantee whatsoever by Witness1
 
 ';
 
-exit $! unless readCommandLine() == 0;
+die $USAGE unless readCommandLine() == 0;
+die $USAGE if exists $args{"-h"};
 
 
 print "Source dir: $SOURCE_DIR\nDestination dir: $DEST_DIR\n";
+print "Force mode: " . ((exists $args{'-f'}) ? "ON\n" : "OFF\n");
+print "Verbose mode: " . ((exists $args{'-v'}) ? "ON\n" : "OFF\n");
 
 my $SOURCEFILE=catfile($DEST_DIR, "project.json");
 
@@ -359,68 +372,76 @@ my %PROJECT = %{from_json(readFile($SOURCEFILE))};
 
 my %LIBRARY = %{$PROJECT{'library.json'}};
 
-# MACROS
-print "Looking up for macro map...";
-die "FAILED! map is missing.\n" unless exists $PROJECT{'macros'};
 my %MACRO = %{$PROJECT{'macros'}};
-print "OK\n";
-
-print "\n[MACROS]\n";
-my $fullMacroPath = catdir($DEST_DIR, $MACRO{'folder'});
-print "Checking for path $fullMacroPath...";
-  make_path($fullMacroPath);
-print "OK\n";
-
-map_converter(\%MACRO, ".mts");
-
-# PROPERTIES
-print "\n[PROPERTIES]\n";
-die "FAILED! properties are missing.\n" unless exists $PROJECT{'properties'};
-my %PROPERTIES = %{$PROJECT{'properties'}};
-delete $PROPERTIES{'updatePropertiesFile'} if exists $PROPERTIES{'updatePropertiesFile'};
-
-my $destDir = catdir($DEST_DIR, $PROPERTIES{'folder'});
-print "Checking for $destDir...";
-  make_path($destDir);
-print "OK\n";
-
-my $sourceMap = catfile($SOURCE_DIR, $PROPERTIES{'map'});
-print "Checking for $sourceMap...";
-  print "MISSING!\n" unless -e $sourceMap;
-  die unless -e $sourceMap;
-print "OK\n";
-
-map_converter(\%PROPERTIES, ".txt");
-
-# # Version
-my $updateVersionProperty = (exists $PROJECT{'autoUpdateVersionProperty'})
-        ? $PROJECT{'autoUpdateVersionProperty'}
-        : 0;
-
-if ($updateVersionProperty) {
-  print "Updating version property...";
-  my $ver = $LIBRARY{'version'};
-  my $propFile = catfile($DEST_DIR, $PROPERTIES{'folder'}, "version.txt");
-  system "echo $ver > '$propFile'";
-  print "OK\n";
-}
-
-# AUTOINIT
-if (exists $PROJECT{'changeLoadToInit'} && $PROJECT{'changeLoadToInit'} == 1) {
-  print "\n[AUTOINIT]\n";
-  print "Looking for onCampaignLoad...";
-  my $campLoadFile = catfile($DEST_DIR, $MACRO{'folder'}, "onCampaignLoad.mts");
-  my $initFile = catfile($DEST_DIR, $MACRO{'folder'}, "onInit.mts");
+my %PROPERTIES = ( exists $PROJECT{'properties'}) 
+  ? %{$PROJECT{'properties'}}
+  : ();
   
-  if (-e $campLoadFile) {
-    print "OK. Renaming.\n";
-    system "mv $campLoadFile $initFile";
+my $fullMacroPath = catdir($DEST_DIR, $MACRO{'folder'});
+
+#
+# source to addon
+#
+
+if (! exists ($args{'-n'}) ) {
+  
+  # MACROS
+  print "Looking up for macro map...";
+  die "FAILED! map is missing.\n" unless exists $PROJECT{'macros'};
+  
+  print "OK\n";
+
+  print "\n[MACROS]\n";
+  print "Checking for path $fullMacroPath...";
+    make_path($fullMacroPath);
+  print "OK\n";
+
+  map_converter(\%MACRO, ".mts");
+
+  # PROPERTIES
+  print "\n[PROPERTIES]\n";
+  if (exists $PROJECT{'properties'}) {
+    delete $PROPERTIES{'updatePropertiesFile'} if exists $PROPERTIES{'updatePropertiesFile'};
+
+    my $destDir = catdir($DEST_DIR, $PROPERTIES{'folder'});
+    print "Checking for $destDir...";
+      make_path($destDir);
+    print "OK\n";
+
+    my $sourceMap = catfile($SOURCE_DIR, $PROPERTIES{'map'});
+    print "Checking for $sourceMap...";
+      print "MISSING!\n" unless -e $sourceMap;
+      die unless -e $sourceMap;
+    print "OK\n";
+
+    map_converter(\%PROPERTIES, ".txt");
   } else {
-    print "ERROR: Missing onCampaignLoad.mts\n";
+    print "No Lib:Token property specified. Ignoring.\n";
   }
+  
+  # AUTOINIT
+  print "\n[AUTOINIT]\n";
+  if (exists $PROJECT{'changeLoadToInit'} && $PROJECT{'changeLoadToInit'} == 1) {
+    print "Looking for onCampaignLoad...";
+    my $campLoadFile = catfile($DEST_DIR, $MACRO{'folder'}, "onCampaignLoad.mts");
+    my $initFile = catfile($DEST_DIR, $MACRO{'folder'}, "onInit.mts");
+    
+    if (-e $campLoadFile) {
+      print "OK. Renaming.\n";
+      system "mv $campLoadFile $initFile";
+    } else {
+      print "ERROR: Requested event rename but missing onCampaignLoad.mts\n";
+    }
+  } else {
+    print "No autoinit request. Ignoring\n";
+  }
+
+} else {
+  print "Source import will be ignored.\n";
 }
 
 # AUTOEXPOSURE
+
 my $shouldExposeMacros = (exists $PROJECT{'autoExpose'}) 
   ? $PROJECT{'autoExpose'}{'enabled'} 
   : 0;
@@ -433,9 +454,8 @@ if ($shouldExposeMacros) {
       "macro_dir" => $fullMacroPath
     )
   );
-  #$EXPOSE{'namespace'} = $LIBRARY{'namespace'};
+
   $EXPOSE{'events'} = $PROJECT{'events.json'} if exists $PROJECT{'events.json'};
-  #$EXPOSE{'macro_dir'} = $fullMacroPath;
   exposureGeneration(\%EXPOSE);
 }
 
@@ -444,6 +464,7 @@ print "\n[FILES]\n";
 
 updateFile("library.json", \%LIBRARY);
 updateFile("events.json", $PROJECT{'events.json'});
+
 
 # ACTIONS
 die "Done.\n" if !defined($ACTION);
@@ -462,10 +483,11 @@ if ($ACTION eq "make") {
   $DEST_DIR = ".";
   
   # Default include paths
-  my @includes = ( "*.*",
-        catfile($DEST_DIR, $MACRO{'folder'},"*.*"),
-        catfile($DEST_DIR, $PROPERTIES{'folder'}, "*"),
-        );
+  my @includes = ( "*.*", 
+        catfile($DEST_DIR, "library", "*.*"),
+        catfile($DEST_DIR, "library", "public", "*.*"),
+        catfile($DEST_DIR, $MACRO{'folder'}, "*.*")
+  );
   
   if (exists $ZIP{'include'}){
     push @includes, catfile($DEST_DIR, $_) foreach ($ZIP{'include'});
@@ -506,10 +528,9 @@ if ($ACTION eq "make") {
     print "Final list: " . @filelist . "\n";
   }
   
-  
   die "FATAL: No file available!\n" if @filelist <= 0;
   
-  my $zipFileName = catfile($DEST_DIR, "dist", sprintf("%s-%s.zip", $LIBRARY{'namespace'},
+  my $zipFileName = catfile($DEST_DIR, "dist", sprintf("%s-%s.mtlib", $LIBRARY{'namespace'},
       $LIBRARY{'version'}) );
   
   print "Ensuring dist path...\n";
@@ -517,8 +538,9 @@ if ($ACTION eq "make") {
   
   print "Zip File: $zipFileName\n";
   
+  unlink $zipFileName if -e $zipFileName;
+  
   zip [ (@filelist) ]  => $zipFileName or die "FAILED ZIP: $ZipError\n";
   
   print "Zip file ready.\n";
-  
 }

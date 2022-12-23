@@ -1,11 +1,12 @@
 [h: assert(isGM(), "Sorry, only gm may open this window!")]
 
-[h:fullObj = "{}"]
+[h: '<!-- this is data model version, not library version -->']
+[h:fullObj = "{'version': '1.0'}"]
 
-[h: vars = "binds, version, cssList, supportedRolls, groupsList, cssOnly, effectsDB"]
+[h: vars = "binds, cssList, supportedRolls, groupsList, cssOnly, effectsDB"]
 
 [h, foreach (var, vars): fullObj = json.set(fullObj, var, getLibProperty(var))]
-
+[h, if (library.listAddOnLibraries()
 [dialog("Database IO", "width=480; height=480; input=1"): {
 <html>
 <head>

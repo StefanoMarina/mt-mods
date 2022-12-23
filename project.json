@@ -1,12 +1,16 @@
 {
   "changeLoadToInit" : 0,
-  "autoUpdateVersionProperty": 1,
   "autoExpose" : {
     "enabled" : 1,
     "defaultShowOutput" : 1,
     "showOutput" : [],
     "include" : [],
-    "exclude" : ["Configure", "onCampaignLoad", "onFirstInitialization"]
+    "exclude" : [
+        "printCSS", "etmUpdate", "effectEditorUpdate", 
+        "bindScoresUpdate", "openDatabaseUpdate", "Configure",
+        "onCampaignLoad", "onFirstInitialization", "effectEditor",
+        "effectsLibrary", "effectsTokenManager", "openDatabase", "bindScores"
+    ]
   },
     "library.json" : {
      "authors" : ["Witness1"],
@@ -24,21 +28,18 @@
   },
 	"macros": {
 		"folder" : "library/mtscript/public",
-		"updatePropertiesFile": 1,
 		"map" : "macro_script_map.txt",
+    "updatePropertiesFile": 1,
 		"exclude": ["onCampaignLoad"],
 		"include" : []
-	},
-	"properties" :{
-		"folder" : "property",
-		"map" : "property/prop_file_map.txt",
-		"exclude" : [],
-		"include" : ["binds", "supportedRolls", "useLibGraph", "cssOnly", "cssList", "effectsDB", "groupsList"]
 	},
 	"events.json": {
 	  "events" : [
       { "name" : "onFirstInit", "mts" : "onFirstInit" },
       { "name" : "onInit", "mts" : "onInit" }
 	  ]
-	}
+	},
+  "zip" : {
+    "exclude" : ["CHANGELOG.md"]
+  }
 }

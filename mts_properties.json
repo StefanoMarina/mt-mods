@@ -2,15 +2,15 @@
    "properties" : [
       {
          "autoExecute" : true,
-         "filename" : "public/macro_7.mts"
+         "filename" : "public/mod.getProperty.mts"
       },
       {
-         "filename" : "public/macro_23.mts",
-         "autoExecute" : true
+         "autoExecute" : true,
+         "filename" : "public/mod.toString.mts"
       },
       {
-         "filename" : "public/macro_27.mts",
-         "autoExecute" : true
+         "autoExecute" : true,
+         "filename" : "public/openDatabaseUpdate.mts"
       },
       {
          "filename" : "public/effect.get.mts",
@@ -25,28 +25,36 @@
          "filename" : "public/mod.ui.bindScores.mts"
       },
       {
-         "filename" : "public/macro_0.mts",
-         "autoExecute" : true
+         "autoExecute" : true,
+         "filename" : "public/onFirstInit.mts"
       },
       {
-         "filename" : "public/openDatabase.mts",
+         "filename" : "public/onInit.mts",
          "autoExecute" : true
       },
       {
          "autoExecute" : true,
-         "filename" : "public/onCampaignLoad.mts"
+         "filename" : "public/bindScores.mts"
       },
       {
          "autoExecute" : true,
-         "filename" : "public/macro_24.mts"
+         "filename" : "public/openDatabase.mts"
+      },
+      {
+         "filename" : "public/onCampaignLoad.mts",
+         "autoExecute" : true
+      },
+      {
+         "autoExecute" : true,
+         "filename" : "public/effect.group.mts"
       },
       {
          "filename" : "public/mod.pvt.getAvailableStates.mts",
          "autoExecute" : true
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/mod.getScore.mts"
+         "filename" : "public/mod.getScore.mts",
+         "autoExecute" : true
       },
       {
          "filename" : "public/mod.get.mts",
@@ -61,7 +69,7 @@
          "autoExecute" : true
       },
       {
-         "filename" : "public/macro_18.mts",
+         "filename" : "public/printCSS.mts",
          "autoExecute" : true
       },
       {
@@ -69,7 +77,7 @@
          "autoExecute" : true
       },
       {
-         "filename" : "public/macro_11.mts",
+         "filename" : "public/effectEditorUpdate.mts",
          "autoExecute" : true
       },
       {
@@ -81,15 +89,15 @@
          "filename" : "public/onFirstInitialization.mts"
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/effect.asReference.mts"
+         "filename" : "public/effect.asReference.mts",
+         "autoExecute" : true
       },
       {
          "autoExecute" : true,
          "filename" : "public/bindScoresUpdate.mts"
       },
       {
-         "filename" : "public/macro_14.mts",
+         "filename" : "public/etmUpdate.mts",
          "autoExecute" : true
       },
       {
@@ -97,16 +105,16 @@
          "filename" : "public/effect.add.mts"
       },
       {
-         "filename" : "public/macro_17.mts",
-         "autoExecute" : true
+         "autoExecute" : true,
+         "filename" : "public/effect.contains.mts"
       },
       {
          "filename" : "public/effect.new.mts",
          "autoExecute" : true
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/macro_9.mts"
+         "filename" : "public/json.getSafe.mts",
+         "autoExecute" : true
       },
       {
          "filename" : "public/effect.ui.manage.mts",
@@ -121,11 +129,11 @@
          "autoExecute" : true
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/mod.set.mts"
+         "filename" : "public/mod.set.mts",
+         "autoExecute" : true
       },
       {
-         "filename" : "public/macro_21.mts",
+         "filename" : "public/mod.ui.edit.mts",
          "autoExecute" : true
       }
    ]
