@@ -6,4 +6,12 @@
 
 [h: prop = getProperty(propName, tokenID, map)]
 [h, if (json.type(modProperty) == "UNKNOWN"): modProperty = getProperty(modProperty, tokenID, map)]
-[h: macro.return = mod.getScore(propName, modProperty, tokenID, map) + mod.get(modProperty, propName, scope, 0)]
+
+[h: '<!-- do not look for score mods if prop is not a number -->']
+[h: scoreValue = mod.getScore(propName, if (isNumber(prop), modProperty, ""), tokenID, map)]
+[h: propMod = mod.get(modProperty, propName, scope, 0)]
+
+[h, if (isNumber(propMod) && isNumber(scoreValue)):
+	macro.return = scoreValue+propMod;
+	macro.return = scoreValue + if (startsWith(propMod, "+") || startsWith(propMod, "-"),
+	propMod, "+" + propMod)]

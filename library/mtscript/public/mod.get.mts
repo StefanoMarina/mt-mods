@@ -16,10 +16,11 @@
 
 [h: return(!json.isEmpty(propMods), otherwise)]
 
-[h: '<!-- TODO: support for dice mods -->']
-
 [h: exp = string(json.toList(propMods, "+"))]
-[h: exp = replace(exp, "\\+\\-", "-")]
+[h: exp = replace(exp, "\\+(\\-|\\+)", "\1")]
 
-[h: macro.return = eval(string(exp))]
+[h, if (matches (exp, "[\\{\\}\\[\\]\\(\\)\\d\\.\\*\\+\\-\\/\\%]*")):
+	macro.return = eval (string(exp));
+	macro.return = string (exp)
+]
 

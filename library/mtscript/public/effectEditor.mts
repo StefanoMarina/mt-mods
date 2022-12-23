@@ -135,7 +135,7 @@
 						</select>
 		
 					</td>
-					<td><input type="number" name="value-{index}" value="{json.get(element, 'value')}" placeholder="0"></td>
+					<td><input type="text" name="value-{index}" value="{json.get(element, 'value')}" placeholder="0"></td>
 				</tr>
 			}]
 			</tbody>
