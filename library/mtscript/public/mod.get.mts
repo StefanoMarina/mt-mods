@@ -18,7 +18,7 @@
 	)]
 [h: exp = replace(exp, "\\+(\\-|\\+)", "\1")]
 
-[h, if (matches (exp, "[\\{\\}\\[\\]\\(\\)\\d\\.\\+\\-]+")):
+[h, if (!getLibProperty("forceString") && matches (exp, "[\\{\\}\\[\\]\\(\\)\\d\\.\\+\\-]+")):
 	macro.return = eval (string(exp));
 	macro.return = string (exp)
 ]

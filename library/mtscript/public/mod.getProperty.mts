@@ -36,7 +36,7 @@
 	exp = scoreValue+propMod;
 	exp = scoreValue + if (!matches(propMod, "^[\\d\\w].*"), propMod, "+" + propMod)]
 	
-[h, if (matches (exp, "[\\{\\}\\[\\]\\(\\)\\d\\.\\+\\-\\*\\/]+")):
+[h, if (!getLibProperty("forceString") && matches (exp, "[\\{\\}\\[\\]\\(\\)\\d\\.\\+\\-\\*\\/]+")):
 	macro.return = eval(exp);
 	macro.return = exp
 ]

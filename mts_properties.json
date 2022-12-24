@@ -5,16 +5,16 @@
          "autoExecute" : true
       },
       {
-         "filename" : "public/macro_24.mts",
+         "autoExecute" : true,
+         "filename" : "public/macro_24.mts"
+      },
+      {
+         "filename" : "public/macro_28.mts",
          "autoExecute" : true
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/macro_28.mts"
-      },
-      {
-         "autoExecute" : true,
-         "filename" : "public/mod.getElements.mts"
+         "filename" : "public/macro_7.mts",
+         "autoExecute" : true
       },
       {
          "autoExecute" : true,
@@ -33,16 +33,16 @@
          "filename" : "public/macro_33.mts"
       },
       {
-         "filename" : "public/macro_32.mts",
+         "autoExecute" : true,
+         "filename" : "public/macro_32.mts"
+      },
+      {
+         "filename" : "public/macro_3.mts",
          "autoExecute" : true
       },
       {
          "autoExecute" : true,
-         "filename" : "public/macro_3.mts"
-      },
-      {
-         "filename" : "public/openDatabase.mts",
-         "autoExecute" : true
+         "filename" : "public/macro_27.mts"
       },
       {
          "filename" : "public/onCampaignLoad.mts",
@@ -53,8 +53,8 @@
          "autoExecute" : true
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/macro_31.mts"
+         "filename" : "public/macro_31.mts",
+         "autoExecute" : true
       },
       {
          "autoExecute" : true,
@@ -65,31 +65,31 @@
          "autoExecute" : true
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/macro_14.mts"
+         "filename" : "public/macro_14.mts",
+         "autoExecute" : true
       },
       {
          "filename" : "public/macro_17.mts",
          "autoExecute" : true
       },
       {
-         "filename" : "public/macro_19.mts",
-         "autoExecute" : true
+         "autoExecute" : true,
+         "filename" : "public/macro_19.mts"
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/macro_30.mts"
+         "filename" : "public/macro_30.mts",
+         "autoExecute" : true
       },
       {
          "autoExecute" : true,
          "filename" : "public/macro_12.mts"
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/macro_13.mts"
+         "filename" : "public/macro_13.mts",
+         "autoExecute" : true
       },
       {
-         "filename" : "public/onFirstInitialization.mts",
+         "filename" : "public/macro_26.mts",
          "autoExecute" : true
       },
       {
@@ -97,16 +97,16 @@
          "filename" : "public/macro_29.mts"
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/macro_11.mts"
-      },
-      {
-         "filename" : "public/macro_15.mts",
+         "filename" : "public/macro_11.mts",
          "autoExecute" : true
       },
       {
          "autoExecute" : true,
-         "filename" : "public/macro_4.mts"
+         "filename" : "public/macro_15.mts"
+      },
+      {
+         "filename" : "public/macro_4.mts",
+         "autoExecute" : true
       },
       {
          "autoExecute" : true,
@@ -125,20 +125,20 @@
          "filename" : "public/macro_21.mts"
       },
       {
-         "filename" : "public/Configure.mts",
+         "filename" : "public/macro_6.mts",
          "autoExecute" : true
       },
       {
-         "filename" : "public/macro_5.mts",
-         "autoExecute" : true
+         "autoExecute" : true,
+         "filename" : "public/macro_5.mts"
       },
       {
          "autoExecute" : true,
          "filename" : "public/macro_8.mts"
       },
       {
-         "autoExecute" : true,
-         "filename" : "public/macro_22.mts"
+         "filename" : "public/macro_22.mts",
+         "autoExecute" : true
       }
    ]
 }
