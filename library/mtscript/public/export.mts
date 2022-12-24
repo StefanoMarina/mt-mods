@@ -13,6 +13,7 @@
 [h: defineFunction("effect.ui.manage", strformat("effect.ui.manage@lib:%{NAMESPACE}"), 1)]
 [h: defineFunction("json.getSafe", strformat("json.getSafe@lib:%{NAMESPACE}"), 1)]
 [h: defineFunction("mod.get", strformat("mod.get@lib:%{NAMESPACE}"), 1)]
+[h: defineFunction("mod.getElements", strformat("mod.getElements@lib:%{NAMESPACE}"), 1)]
 [h: defineFunction("mod.getProperty", strformat("mod.getProperty@lib:%{NAMESPACE}"), 1)]
 [h: defineFunction("mod.getScore", strformat("mod.getScore@lib:%{NAMESPACE}"), 1)]
 [h: defineFunction("mod.pvt.getAvailableStates", strformat("mod.pvt.getAvailableStates@lib:%{NAMESPACE}"), 1)]

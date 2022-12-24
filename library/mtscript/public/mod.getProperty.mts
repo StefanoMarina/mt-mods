@@ -7,11 +7,36 @@
 [h: prop = getProperty(propName, tokenID, map)]
 [h, if (json.type(modProperty) == "UNKNOWN"): modProperty = getProperty(modProperty, tokenID, map)]
 
-[h: '<!-- do not look for score mods if prop is not a number -->']
-[h: scoreValue = mod.getScore(propName, if (isNumber(prop), modProperty, ""), tokenID, map)]
-[h: propMod = mod.get(modProperty, propName, scope, 0)]
+[h: '<!-- do not look for score if prop is not a number -->']
+[h, if (isNumber(prop)): 
+	scoreValue = mod.getScore(propName, modProperty, tokenID, map); 
+	scoreValue= prop
+]
 
+[h: elements = mod.getElements(modProperty, propName, scope)]
+[h: return (!json.isEmpty(elements), scoreValue)]
+
+[h: '<!-- force value -->']
+[h: forcings = replace(
+	json.toList(json.path.read(elements, "*[?(@.value =~ /^=.*/)].value")),
+	"=", "")
+]
+
+[h, if (forcings != ""), code: {
+	[forcings = listSort(forcings,getLibProperty("forceSortMethod"))]
+	[scoreValue = listGet(forcings, 0)]
+}]
+[h: '<!-- retrieve buff-->']
+[h: propMod = mod.get(elements, propName, scope, 0, 1)]
+
+[h: return (propMod != 0, scoreValue)]
+
+[h: '<!-- evaluate expression -->']
 [h, if (isNumber(propMod) && isNumber(scoreValue)):
-	macro.return = scoreValue+propMod;
-	macro.return = scoreValue + if (startsWith(propMod, "+") || startsWith(propMod, "-"),
-	propMod, "+" + propMod)]
+	exp = scoreValue+propMod;
+	exp = scoreValue + if (!matches(propMod, "^[\\d\\w].*"), propMod, "+" + propMod)]
+	
+[h, if (matches (exp, "[\\{\\}\\[\\]\\(\\)\\d\\.\\+\\-\\*\\/]+")):
+	macro.return = eval(exp);
+	macro.return = exp
+]

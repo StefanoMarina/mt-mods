@@ -1,4 +1,4 @@
-[h: vars = "cssList, supportedRolls, cssOnly, groupsList"]
+[h: vars = "cssList, supportedRolls, cssOnly, groupsList, forceString, forceSortMethod"]
 [h: jobj = "{}"]
 [h: location = getMacroLocation()]
 
@@ -22,10 +22,14 @@
 	"cssOnly|"+cssOnly+"|<html>Use internal CSS (suggested)|CHECK"
 )]
 
-[h: bindTab = strformat("jnkTitle|<html><h4>Effect groups</h4>"+
+[h: bindTab = strformat("jnkTitle|<html><h3>Property behaviour</h3>"+
+"%{ptag}You may select how to handle certain behaviours from buff stacking here.</p>||LABEL|SPAN=TRUE##"+
+"forceString|%{forceString}|Always return a string|CHECK##"+
+"forceSortMethod|A+,A-,N-|Sort force multiple values|RADIO|ORIENT=H SELECT=%d ##" +
+"jnkTitle2|<html><h3>Effect groups</h3>"+
 "%{ptag}Groups allow easy searching and classification of effects, i.e. <i>Combat</i> or <i>Spells</i>. Add groups as a comma separated list. <i>all</i> is reserved|-|LABEL|SPAN=TRUE ##" +
 "groupsList|%{groupsList}|Groups|TEXT"
-)]
+, listFind("A+,A-,N-", forceSortMethod))]
 
 [h: rollTab = strformat("jnkTitle|<html><h3>Supported rolls</h3>" +
 "%{ptag}Roll scopes are roll types, used to discriminate between buffs (+1 to check is not +1 to score)</p>"+
@@ -35,7 +39,8 @@
 
 [h: abort ( input (
 	"tab0|WELCOME||TAB", welcomeTab,
-	"tab1|Configuration||TAB", cssTab+"##"+bindTab+"##"+rollTab
+	"tab1|Configuration||TAB", bindTab+"##"+rollTab,
+	"tab2|Look & Feel||TAB", cssTab
 ) ) ]
 
 [h: jobj = json.merge(jobj, json.fromStrProp(tab0 , "##"))]
