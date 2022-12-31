@@ -1,1 +1,4 @@
 dist/*
+documentation/*.html
+documentation/*.xml
+documentation/*.md
