@@ -1,0 +1,1 @@
+[h: setLibProperty("forceString", arg(0), getMacroLocation())]

@@ -18,15 +18,19 @@
 }]
 
 [h: OPTIONLIST = listFormat(rollTypes, "%list", "<option value='%item'>%item</option>","")]
-
 [h: eventLink = macroLinkText("effectEditorUpdate@this")]
-		
-[dialog5("Effect editor", "width=600; height=400; title=Effect editor;input=1"):{
+
+[h: extras = getLibProperty("extraEffectProperties")]
+[h: modExtras = getLibProperty("extraModProperties")]
+[h, if (modExtras != ""): pureObj = json.fromStrProp(replace(modExtras, ",", "=0;")+"=0"); pureObj = "{}"]
+
+[dialog5("Effect editor", "width=600; height=450; title=Effect editor;input=1"):{
 <html>
 	<head>
 	[r, macro("printCSS@this"()):""]
 	[r, if (getLibProperty("cssOnly") != 0): '
 	<style>
+		
 		input { background-color: transparent; border: none; border-bottom: 1px solid black; width: 100%; padding: 3px; margin: 0 }
 		p {font-size: 12;}
 		.hidden {display: none}
@@ -34,16 +38,24 @@
 		table tr:nth-child(even) {background-color: white}
 		table tr:nth-child(odd) {background-color: lightgray}
 	
-		input, select { border: none; width: 100%; padding: 3px; }
-
+		#effectsTable input, select {border: none; width: 100%; padding: 3px; }
 		.footbar { text-align: center }
 		.footbar button {width: 25%; margin: 2%}
 
 		.hidden {display: none !important}
 		.lt-container {width: 100%}
+
+		#extrasTable {border: 1px solid gray; width: 100%; margin-top: 5px; margin-bottom: 5px}
+		#extrasTable label {font-weight: bold; font-size: 14px; font-variant: small-caps }
 	</style>
 	'; '']
 
+	<style>
+	[r, if (modExtras == ""): '
+		#effectsTable th:nth-child(4), #effectsTable td:nth-child(4) { display: none !important}
+	';'']
+	</style>
+	
 	<script>
 	[r: '
 	function showHelp(val) {
@@ -70,6 +82,7 @@
 	[r, if (json.contains(args, "replaces")): strformat("<input type='hidden' name='replaces' value='%s'>", string(json.get(args, "replaces")));""]
 		<p id="log"></p>
 
+		<!-- NAMES &amp; STUFF -->
 		[r, if (statesList != ""), code: {
 		  <table class="table lt-container">
 			  <th>Effect name</th>
@@ -109,11 +122,31 @@
 			<input name="name" value="[r: json.get(effect, 'name')]" placeholder="Effect name...">
 		</div>
 		}]
+		<!-- EXTRA FIELDS -->
+		[r, if (extras != ""), code: {
+			<table class="table" id="extrasTable">
+				<tr>
+				
+				[r, foreach (ex, extras, ""): strformat('<td>
+					<label>%{ex}</label></td>
+					<td><input type="text" name="ex-%{ex}" value="%s"></td>
+					%s
+				', 
+				json.get(effect, ex),
+				if ( math.mod( (listFind(extras, ex)+1), 4) == 0, "</tr><tr>","")
+				)]
+				</tr>
+				</table>
+
+		};{}]
+
+		<!-- MOD LIST -->
 			<table class="table" id="effectsTable" style="width:100%; overflow-y: auto; height: 300px; margin-top: 10px">
 			<thead>
 				<th>Property</th>
-				<th>Roll type</th>
+				<th style="min-width: 15%">Roll type</th>
 				<th>Mod</th>
+				[r, foreach(modEx, modExtras,""): strformat("<th>%s</th>", capitalize(modEx))]
 			</thead>
 			<tbody>
 			[h: effectsData = json.get(effect, "effects")]
@@ -136,6 +169,9 @@
 		
 					</td>
 					<td><input type="text" name="value-{index}" value="{json.get(element, 'value')}" placeholder="0"></td>
+
+					[r, foreach (modEx, modExtras): strformat("<td><input type='text' name='%{modEx}-%{index}' value='%s' placeholder='-'></td>",
+					if (json.contains(element, modEx), json.get(element,modEx), "") )]
 				</tr>
 			}]
 			</tbody>

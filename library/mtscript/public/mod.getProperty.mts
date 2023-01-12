@@ -26,17 +26,21 @@
 	[forcings = listSort(forcings,getLibProperty("forceSortMethod"))]
 	[scoreValue = listGet(forcings, 0)]
 }]
+
 [h: '<!-- retrieve buff-->']
 [h: propMod = mod.get(elements, propName, scope, 0, 1)]
 
 [h: return (propMod != 0, scoreValue)]
 
+[h: stringExpression = strformat("%{scoreValue}%s%{propMod}",
+		if (!matches(propMod, "^[\\+\\-\\*\\/].*"),"+","")
+)]
+
+[h: return (!getLibProperty("forceString"), stringExpression)]
+
 [h: '<!-- evaluate expression -->']
-[h, if (isNumber(propMod) && isNumber(scoreValue)):
-	exp = scoreValue+propMod;
-	exp = scoreValue + if (!matches(propMod, "^[\\d\\w].*"), propMod, "+" + propMod)]
-	
-[h, if (!getLibProperty("forceString") && matches (exp, "[\\{\\}\\[\\]\\(\\)\\d\\.\\+\\-\\*\\/]+")):
-	macro.return = eval(exp);
-	macro.return = exp
+
+[h, if (matches (stringExpression,  "^[ \\{\\}\\[\\]\\(\\)\\d\\.\\+\\-\\*\\/]+\$")):
+	macro.return = eval(stringExpression);
+	macro.return = stringExpression
 ]

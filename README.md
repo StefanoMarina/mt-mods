@@ -1,6 +1,6 @@
 # Lib:Mod
 
-A maptool library with low-level macros for mods, buffs, scores and effects.
+A maptool library with "low-level" macros for mods, buffs, scores and effects.
 
 Something that most games have in common is numbers, and the need to temporarely
 change them. Using a +1 sword in all d20-based games will improve by 1 the roll
@@ -19,39 +19,94 @@ an object with _FIELD_. be careful or sanitize your requests.
 
 Despite being low-level, simple GUI management is included, in the form of dialog5s.
 
+### What "low-level" means?
+
+Basically, this addon library will provide you a framework to build and apply your effects and mods. However, they won't be
+functioning automatically. a special macro, `getModProperty` , or his advanced form, `mod.getProperty`, 
+must be called to retrieve the modified attribute. the attribute per se won't be modified!
+
+This is by design, as more than often the original value must be preserved.
+
+As of version 1.1, a **macro set** is included into the distribution file to ease buff and effect management
+
 ## Installation
 
-- Lib:Token: just add the token on your campaign, impersonate and press ``onCampaignLoad`` or save/reload the campaign.
-- Add-on (Experimental): add the addon .zip file via the file menu, and cross your fingers. clone this repo and do the necessary changes if necessary.
+- Lib:Token: just add the token on your campaign, impersonate and press ``onFirstInitialization`` ,``onCampaignLoad`` and ``Configure``.
+- Add-on (Experimental): add the addon .zip file via the file menu, and cross your fingers. clone this repo and do the necessary changes if necessary. The first time you enable this add-on, the configuration panel should open. if not, do ``{mod.configure()}``
+- Basic usage: add the macro-set to your campaign or GM macros.
 
 **IMPORTANT** At the time I write this (october 2022), add-ons are considered not stable for gameplay. I **strongly** suggest you start with the drag'n'drop token library, and
 move to the add-on when it is more stable. Also, There are probably a lot of bugs still to be found out in the addon version.
 
-If you are cloning this repo, zip all files (root dir as zip root dir) to create an add-on. 
+**UPDATE (Jan 2023)**: Altough addons are still a work in progress, the library is now safe to use.
 
-The first time you enable this mod, the configuration panel should open. if not, do ``{mod.configure()}`` . if this command does not work, then
-you are on your own (sorry :( ).
+### Cloning this repo
+
+If you want to fork and build stuff your own, you have to get git and clone this repo.
+
+You will also need `perl` (for the builder), and `xsltproc` (for documentation).
 
 ### Messing with the configuration
 
-Let's check out what can be configured.
+Let's check out what can be configured. Any String List you will stumble upon is comma-separated, no option for custom lists will be provided. '0' means empty string.
 
-Any String List you will stumble upon is comma-separated, no option for custom lists will be provided. '0' means empty string.
- 
+#### Configuration panel
+
+- **Always return an expression instead of a value**: By default, lib:mod will return a single number if all mods are numbers (i.e. 10+2), or a string if a non-number is present (i.e. 10+1+DEX).
+- **Set force multiple values**: if your token has multiple *force this value to* (see later), this will let your choose how to sort (best, last, string).
+- **Default property** : this is **really** important for basic usage. Please ensure that any token you are instered in mods and effects will have this property, and that the default property value is `[]`. To set a default property value, go to Configure -> Campaign Properties, and add `mods : []` and click *Update* and then OK.
+- **Effect groups**: You may create groups here, this will help sorting effects or even placing limits.
+- <a id="srt"><a>**Supported rolls**: sometimes you want to give +1 to a check, sometimes you want to give it only to a saving throw. The already present roll types are simple suggestions. _all_ is reserved to skip roll type, while _score_ is used to elaborate between _score buffs_ (i.e. 15+1=16) from _roll buffs_) (i.e.12=+1+, henche +2 ).
+
+#### Look & Feel
 - **CSS**: you can embed css files/macro into the dialogs. add the macros in _macro@lib_ format.
 - **Use internal CSS** (default: yes) : you may force-removal any of the css present. This will mess the dialogs. But who knows, maybe you need it.
-- <a id="srt"><a>**Supported rolls**: sometimes you want to give +1 to a check, sometimes you want to give it only to a saving throw. The already present roll types are simple suggestions. _all_ is reserved to skip roll type, while _score_ is used to elaborate between _score buffs_ (i.e. 15+1=16) from _roll buffs_) (i.e.12=+1+, henche +2 ).
-- **Effect groups**: You may create groups here, this will help sorting effects or even placing limits (i.e. 2E only allows 1 magical effect to any mod).
 
-### Suitable properties
+#### Advanced
 
-Now, where to store your mods and effects? you may use any property you want. a **Mod property** is expected to be a **json array** (`[]`), but with
-some experimentation they can be put anywhere.
+- **Extra effect fields**: if you need extra json data to be inserted in your effect, add the list of keys here.
+- **Extra mod  fields**: Same as extra effects, but 
 
-### Database
+# Basic Usage
+
+1. Configure Lib:Mod
+2. Install the macro set.
+
+## Mods, effects, scores and such
+
+A **Mod** is the most basic buff, i.e. "+2 to AC" or "+1 to Strength checks". It comprises one or more property, a value, and a **roll type**.
+
+**Roll types** are very important, as they tell if a mod is to be applied or not. a +1 to Strength score is not a +1 to strength checks and not +1 to strength saves.
+
+You may add any type of property and roll type, keep in mind however that the **all** and **score** are reserved keyword. **all** will ignore the context, save for score, and **score** will be applied only to scores.
+
+By the way, what's a **Score**? A score is a number that generates a roll modifier. I.e. Strength 15 becomes +2.
+
+To create a score bind, click the ``Library`` macro, create a table with the values, and select *Bind a property to a score table*. Add the property (case sensitive!) to the right of the table's name. Use a comma for multiple properties.
+
+Congrats! you may now use ``getScore`` to retrieve +2 instead of 15, plus any *score* mod will be applied automatically.
+
+**Effects** are basically a collection of mods under the same name, i.e. *Bless* is +1 to all attacks and +1 to fear saves. Use **Effect library to bind your effects.
+
+A nice thing about effects is that they may be bound to **states**, so that ``mod.setEffect`` will enable/disable a state on a token automatically. Neat!
+
+Also, effects may be passed as reference. Always pass them as reference, unless you want to create a special effect inside a token and not into the database.
+
+- To create global effect, click ``Effect Library`` and select create new effect.
+- To crate a custom effect, select a token and click ``Effects`` and click ``Custom``.
+
+That's it! If you need to **add buffs on the fly**, use `Edit buffs` on the intended tokens. you may use this to bulk add (but not bulk remove) a buff. 
+
+## Database
 
 While you can just dump a getLibProperty on all properties, a fancy database utility is provided. This utility will serialize the lib token into a json object,
 to be saved or changed. Access is done via the _Configure_ panel.
+
+# Advanced usage
+
+Now, where to store your mods and effects? you may use any property you want. a **Mod property** is expected to be a **json array** (`[]`), but with
+some experimentation they can be put anywhere. Multiple mod properties may be useful to separate contexts such as inventory and spell mods, however keep in mind
+that you will always have to ``json.merge`` them before using.
 
 <a id="mod"></a>
 ## Mods
@@ -95,6 +150,7 @@ want to be automatically translated to a bonus. This way, any ``mod.getProperty`
 ``mod.getScore`` is not just a call to ``table()``. Instead, it allows to get the modifier from the attribute score with a json array containing mods and effects.
 in a way, is just like calling ``table ( getProperty()+getMod(score+all) )``.
 
+<a id="effects"></a>
 ## Effects
 
 Basically, an effect is a set of mods applied under the same name, and with a bindable Status. d20's _Bless_ is a good example. You have an effect ("blessed"), and two mods (+1 to fear checks, +1 to attack rolls).
@@ -146,6 +202,7 @@ There is an _access_ parameter to``effect.ui.manage`` that allows you to select 
 
 ``effect.new()`` is to be preferred to json.set as it will ensure the effect object is schema-compatible. ``effect.add`` and ``effect.remove`` will handle multiple entries, by forcing replacing or stack. ``effect.get``, ``effect.contains`` and ``effect.group`` are useful for queries. 
 
+<a id="effectReference"></a>
 ## Effect reference
 
 An **effect reference** is a simple json object that points to a dabatase effect instead of containing all the information. Now, why such thing would exists? Simple: to handle global effect changes. Let's say you want to use your ~~rac~~ archetype modifiers as effects, and add them to a token instead of modifying each stat every time. Now imagine you misspelled something, or simply want to add another feature. With effect reference, you only need to change a global effect - all other effect will change automatically.

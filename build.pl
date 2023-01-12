@@ -15,6 +15,8 @@ use IO::Compress::Zip qw(:all);
 use Cwd;
 use Cwd 'abs_path';
 
+use Data::Dumper;
+
 my ($SOURCE_DIR, $DEST_DIR, $ACTION, %args);
 
 
@@ -262,8 +264,6 @@ sub updateFile {
 
 sub exposureGeneration
 {
-  use Data::Dumper;
-  
  my %config = %{$_[0]};
  
   my @includes = (exists ($config{'include'}))
@@ -341,9 +341,10 @@ sub exposureGeneration
   print "Done\n";
 }
 
-#
+# ----------------------------------------------------------------------
 # MAIN THREAD
-#
+# ----------------------------------------------------------------------
+
 print '
 ------------------------------------------------
 MAPTOOL ADDON BUILDER v.1.0 (Maptool 1.12.2)
@@ -378,6 +379,13 @@ my %PROPERTIES = ( exists $PROJECT{'properties'})
   : ();
   
 my $fullMacroPath = catdir($DEST_DIR, $MACRO{'folder'});
+
+#
+# CUSTOM : CREATE MTS_PROPERTIES
+#
+my $TOKFILE = "dist/Lib:Mod-".$LIBRARY{'version'}.".rptok";
+
+system "perl build_macro_properties.pl $TOKFILE";
 
 #
 # source to addon
@@ -475,8 +483,9 @@ if ($ACTION eq "make") {
   
   print "Target: $zipTarget\n";
   
-  my %ZIP = exists ($PROJECT{'zip'}) ? $PROJECT{'zip'} : ();
+  my %ZIP = exists ($PROJECT{'zip'}) ? %{$PROJECT{'zip'}} : ();
   
+
   # Change to zip dir
   chdir $DEST_DIR or die "Cannot access destination dir: $!\n";
   
@@ -499,7 +508,7 @@ if ($ACTION eq "make") {
         );
   
   if (exists $ZIP{'exclude'}){
-    push @excludes, catfile($DEST_DIR, $_) foreach ($ZIP{'exclude'});
+    push @excludes, catfile($DEST_DIR, $_) foreach (@{$ZIP{'exclude'}});
   }
   
   my @includeFileList = ();

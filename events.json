@@ -5,8 +5,8 @@
          "mts" : "onFirstInit"
       },
       {
-         "mts" : "onInit",
-         "name" : "onInit"
+         "name" : "onInit",
+         "mts" : "onInit"
       }
    ]
 }

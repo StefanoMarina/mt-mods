@@ -3,10 +3,10 @@
 [h: '<!-- this is data model version, not library version -->']
 [h:fullObj = "{'version': '1.0'}"]
 
-[h: vars = "binds, cssList, supportedRolls,forceString,forceSortMethod,groupsList, cssOnly, effectsDB"]
+[h: vars = "binds, cssList, supportedRolls,forceString,forceSortMethod,groupsList,cssOnly,effectsDB,extraEffectProperties,extraModProperties"]
 
 [h, foreach (var, vars): fullObj = json.set(fullObj, var, getLibProperty(var))]
-[h, if (library.listAddOnLibraries()
+
 [dialog("Database IO", "width=480; height=480; input=1"): {
 <html>
 <head>
