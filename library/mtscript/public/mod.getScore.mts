@@ -6,7 +6,10 @@
 [h: propValue = getProperty(prop, tokenID, mapID)]
 [h, if (jarr != "" && json.type(jarr) == "UNKNOWN"): jarr = getProperty(jarr, tokenID, mapID)]
 
-[h, if (jarr != ""): propValue = propValue +  mod.get(jarr, prop, "score")]
+[h, if (jarr != ""): modProp = mod.get(jarr, prop, "score"); modProp = 0]
+[h: assert( isNumber (modProp), "mod.getScore: only numeric mods may be passed. " + modProp + " is not a number")]
+
+[h: propValue = propValue + modProp]
 
 [h: libdata = getLibProperty("binds")]
 [h, if (json.type(libdata) != "ARRAY"): libdata = "[]"]

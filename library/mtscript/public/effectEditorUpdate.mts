@@ -4,15 +4,26 @@
 [h: replaces = if (json.contains(args, "replaces"), json.get(args, "replaces"), -1)]
 
 [h: fxes = "[]"]
-[h, count(10): fxes = mod.set(fxes,
-	json.get(args, "prop-"+roll.count),
-	json.get(args, "value-"+roll.count),
-	json.get(args, "type-"+roll.count),
-	0
-)]
+[h: modExtras = getLibProperty("extraModProperties")]
+
+[h, count(10), code:{
+	[props = json.get(args, "prop-"+roll.count)]
+	[if (props != ""): mod = mod.set("",
+		props,
+		json.get(args, "value-"+roll.count),
+		json.get(args, "type-"+roll.count)
+	); mod ="{}"]
+
+	[foreach(mex, modExtras), 
+		if (json.get(args, mex+"-"+roll.count) !="") : 
+			mod = json.set(mod, mex, json.get(args, mex+"-"+roll.count), "rc", roll.count)
+	]
+
+	[if (json.get(mod, "property") != "" && json.get(mod, "value") != 0): fxes = json.append(fxes, mod)]
+}]
 
 [h: '<!-- cleanse empty values -->']
-[h: fxes = json.path.read(fxes, "*[?(!@.property != '' && @.value != 0)]")]
+[h: fxes = json.path.read(fxes, "*[?(@.property != '' && @.value != 0)]")]
 [h: assert(json.length(fxes)>0, "You have not selected a valid property buff!")]
 
 [h: effect = effect.new(json.get(args, "name"), 
@@ -21,6 +32,13 @@
 		fxes,
 		json.get(args, "group")
 		)]
+
+[h: '<!-- add extra fx fields -->']
+[h: fxExtras = getLibProperty("extraEffectProperties")]
+[h, if (fxExtras != ""), foreach (ex, fxExtras), 
+	if (json.get(args, "ex-"+ex) != ""): 
+	effect = json.set(effect, ex, json.get(args, "ex-"+ex))
+]
 
 [h: target = json.get(args, "tokenID")]
 

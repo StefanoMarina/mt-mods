@@ -10,13 +10,19 @@
 	[h: preFxDb = "{}"]
 	[h: len = json.length(names)]
 	
-	[h: '<!-- todo: shouldn we assume that most effects won_t have the same name? -->']
+	[h: return (len > 0, jarr)]
+
+	[h: '<!-- purge database and turn it into a map -->']
+	[h: lintList = json.unique(names)]
+	[h: database = json.path.read( database, strformat("*[?(@.type == 'effect' && @.name in %{lintList})]"), "ALWAYS_RETURN_LIST")]
+	[h, foreach (entry, database): preFxDb= json.set(preFxDb, json.get(entry, "name"), entry)]
+
 	[h, for (i,0, len), code: {
-	
 		[name = json.get(names, i)]
-		[if (!json.contains(preFxDb, name)): preFxDb = json.set(preFxDb, name, effect.get(name, 0, database))]
-		
-		[jarr = json.path.set(jarr, json.get(refs, i), json.get(preFxDb, name))]
+		[if (json.contains(preFxDb, name)):
+			jarr = json.path.set(jarr, json.get(refs, i), json.get(preFxDb, name)) ;
+			log.warn("effect.resolve: Warning! cannot find reference to effect '" + name +"'")
+		]
 	}]
 	[h: macro.return = jarr]
 };{

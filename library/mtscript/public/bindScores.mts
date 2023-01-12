@@ -13,11 +13,10 @@
 
 [h: len = listCount(tables)]
 
-[dialog5("Score bind", "title=Score bind; width=600; height=300; title=Score bind editor; input=1"): {
+[dialog("Score bind", "title=Score bind; width=600; height=300; title=Score bind editor; input=1"): {
 <html>
-<head>[r, macro("printCSS@"+getMacroLocation()):""]</head>
 <body>
-	<p><small>Enter properties that will be bound to a table in the text field, with comma, i.e. "STR, DEX, CON."</small></p>
+	<p><small>Enter properties that will be bound to a table in the text field, with comma, i.e. "Strength,Dexterity,Constitution."</small></p>
 	<p><small>Please remember that json parsing is <b>case sensitive</b>.</small></p>
 	<form method="JSON" action="[r: macroLinkText('bindScoresUpdate@'+getMacroLocation(), 'self')]">
 	<table style="width: 100%">
@@ -33,7 +32,7 @@
 			</tr>
 		}]
 	</table>
-	<div style="text-align:center"><button type="submit" name="submit" value="Submit">Submit</button></div>
+	<div style="text-align:center"><input type="submit" name="submit" value="Submit"></div>
 	</form>
 </body>
 </html>

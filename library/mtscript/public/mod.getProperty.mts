@@ -6,4 +6,41 @@
 
 [h: prop = getProperty(propName, tokenID, map)]
 [h, if (json.type(modProperty) == "UNKNOWN"): modProperty = getProperty(modProperty, tokenID, map)]
-[h: macro.return = mod.getScore(propName, modProperty, tokenID, map) + mod.get(modProperty, propName, scope, 0)]
+
+[h: '<!-- do not look for score if prop is not a number -->']
+[h, if (isNumber(prop)): 
+	scoreValue = mod.getScore(propName, modProperty, tokenID, map); 
+	scoreValue= prop
+]
+
+[h: elements = mod.getElements(modProperty, propName, scope)]
+[h: return (!json.isEmpty(elements), scoreValue)]
+
+[h: '<!-- force value -->']
+[h: forcings = replace(
+	json.toList(json.path.read(elements, "*[?(@.value =~ /^=.*/)].value")),
+	"=", "")
+]
+
+[h, if (forcings != ""), code: {
+	[forcings = listSort(forcings,getLibProperty("forceSortMethod"))]
+	[scoreValue = listGet(forcings, 0)]
+}]
+
+[h: '<!-- retrieve buff-->']
+[h: propMod = mod.get(elements, propName, scope, 0, 1)]
+
+[h: return (propMod != 0, scoreValue)]
+
+[h: stringExpression = strformat("%{scoreValue}%s%{propMod}",
+		if (!matches(propMod, "^[\\+\\-\\*\\/].*"),"+","")
+)]
+
+[h: return (!getLibProperty("forceString"), stringExpression)]
+
+[h: '<!-- evaluate expression -->']
+
+[h, if (matches (stringExpression,  "^[ \\{\\}\\[\\]\\(\\)\\d\\.\\+\\-\\*\\/]+\$")):
+	macro.return = eval(stringExpression);
+	macro.return = stringExpression
+]

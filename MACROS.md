@@ -1,502 +1,760 @@
+
 # Macro Reference
 
-Version 1.0.0
+Version 1.1.0
 
-I apologize for inconsistencies between each macro explaination.
+I apologize for inconsistencies between each macro explaination. From version 1.1.0, this file is generated automatically.
 
 When `[]` or `{}` is near a parameter, this means a json array or a json object is expected as a parameter.
 
 When a parameter has a =_something_ , i.e. `token=currentToken()`, this means the parameter will resolve to that value if not specified.
 
 ## Macro List
-
-### Mod macros
-[mod.get](#mod.get)
-
-[mod.getProperty](#mod.getProperty)
-
-[mod.getScore](#mod.getScore)
-
-[mod.set](#mod.set)
-
-[mod.ui.edit](#mod.ui.edit)
-
-### Effect macros
-
-[effect.asReference](#effect.asReference)
-
 [effect.add](#effect.add)
-
+    
+[effect.asReference](#effect.asReference)
+    
 [effect.contains](#effect.contains)
-
+    
 [effect.get](#effect.get)
-
+    
 [effect.group](#effect.group)
-
+    
 [effect.new](#effect.new)
-
+    
 [effect.remove](#effect.remove)
-
+    
 [effect.resolve](#effect.resolve)
-
+    
 [effect.ui.manage](#effect.ui.manage)
-
+    
+[getModProperty](#getModProperty)
+    
+[getScore](#getScore)
+    
+[isMod](#isMod)
+    
+[json.getSafe](#json.getSafe)
+    
+[mod.eval](#mod.eval)
+    
+[mod.get](#mod.get)
+    
+[mod.getElements](#mod.getElements)
+    
+[mod.getInterfaceProperty](#mod.getInterfaceProperty)
+    
+[mod.getProperty](#mod.getProperty)
+    
+[mod.getScore](#mod.getScore)
+    
+[mod.pvt.getAvailableStates](#mod.pvt.getAvailableStates)
+    
+[mod.set](#mod.set)
+    
 [mod.setEffect](#mod.setEffect)
-
-### General macros
-
+    
+[mod.setForceString](#mod.setForceString)
+    
 [mod.toString](#mod.toString)
+    
+[mod.ui.bindScores](#mod.ui.bindScores)
+    
+[mod.ui.edit](#mod.ui.edit)
+    
 
-[mod.ui.bindScore](#mod.ui.bindScore)
+## Macro Description
 
-### Private macros
+[]{#effect.add}
 
-json.getSafe
-
-This is for internal use only and may be deprecated in the future. basically, returns an empty object or array if a non-json is passed as a parameter.
-
-## Macro description
-
-<a id="effect.add"></a>
 ### effect.add
 
-```
-effect.add(jarr[], fx)
-effect.add(jarr[], fx, replace=0)
-```
+Stores into `jarr` a new effect, either retrieving it from the global
+database or by creating from scratch.
 
-Stores into `jarr` a new effect, either retrieving it from the global database or by creating from scratch.
+#### Usage
 
-##### Parameters
+` effect.add(jarr[], fx) effect.add(jarr[], fx, replace=0)`
 
-*   jarr: where to store the object.
-*   fx: either a string for the effect name or an effect object to be added.
-*   replace: replace the effect if a similar effect is found on `jarr`. The effect will be stacked otherwise.
+#### Parameters
 
-##### Remarks
+-   `jarr[]`: a json array where the object will be stored.
+-   `fx`: either a string for the effect name or an effect json object
+    to be added.
+-   `replace`: if true (1), macro will replace any effect with a similar
+    effect inside `jarr`. The effect will be stacked otherwise.
 
-This is most useful as a quick way to add fxes from the database. however,
+#### Remarks
 
-json path search is case-sensitive, so `bless` is different from `Bless`. Same for any properties.
+This is most useful as a quick way to add fxes from the database.
+however, json.path search is case-sensitive, so `bless` is different
+from `Bless`. Same goes for any properties.
 
-The name property is used to look inside the general DB when `effects` is not set.
+The name property is used to look inside the general DB when `effects`
+is not set.
 
-##### Returns
+#### Returns
 
 The expanded `jarr` array.
 
-<a id="effect.asReference"></a>
-### effect.asReference(fxName)
+[]{#effect.asReference}
 
-A wrap-up to create an _effect reference_ to a global effect. This ensures object integrity.
+### effect.asReference
 
-##### Parameters
+A wrap-up to create an *effect reference* to a global effect. This
+ensures object integrity.
 
-*   fxName: name of the global effect
+#### Usage
 
-##### Remarks
+`effect.asReference(fxName)`
 
-This creates an effect reference to a global effect instead of a real effect, meaning the array must be resolved againt references before retrieving all mods. this is done automatically by `mod.get`, see `effect.resolve` for more info.
+#### Parameters
 
-json path search is case-sensitive, so `bless` is different from `Bless`. Same for any properties.
+-   `fxName`: name of the global effect
 
-##### Returns
+#### Remarks
 
-a json _Effect reference_ object.
+This creates an effect reference to a global effect instead of a real
+effect, meaning the array must be resolved againt references before
+retrieving all mods. this is done automatically by `mod.get`, see
+`effect.resolve` for more info.
 
-<a id="effect.contains"></a>
+json path search is case-sensitive, so `bless` is different from
+`Bless`. Same for any properties.
+
+#### Returns
+
+a json *Effect reference* object.
+
+[]{#effect.contains}
+
 ### effect.contains
 
-Utility to check an effect presence on a json narray.
-```
-effect.contains(jarr, effectName)
-```
+Utility to check if an effect is inside a json narray.
 
-##### Parameters
+#### Usage
 
-*   jarr: a valid json array
-*   effect: either a json effect object, a or a string with an existing effect on the token or an effect on the global database.
+`   effect.contains(jarr, effectName)`
 
-##### Remarks
+#### Parameters
 
-json path search is case-sensitive, so _bless_ is different from _Bless_. Same for any properties.
+-   `jarr`: a valid json array
+-   `effect`: either a json effect object, a or a string with an
+    existing effect on the token or an effect on the global database.
 
-##### Returns
+#### Remarks
 
-1 if the effect is present, 0 otherwise.
+json path search is case-sensitive, so *bless* is different from
+*Bless*.Same for any properties.
 
-<a id="effect.get"></a>
+#### Returns
+
+1 if the effect is present, 0 otherwise. []{#effect.get}
 
 ### effect.get
-```
-	effect.get(name)
-	effect.get(name, index = -1)
-	effect.get(name, index = -1, jarr\[\])
-```
 
-Returns a json list of effects matching `name`. If an effect has multiple entries, all entries are returned.
+Returns a json list of effects matching `name`. If an effect has
+multiple entries, all entries are returned.
 
-##### Parameters
+#### Usage
 
-*   name: effect name.
-*   jarr : array where to look up for `name`. If not specified, the global DB is searched instead.
-*   index : which effect from the list. defaults to -1, which means the whole array will be returned. Set it to 0 to avoid returning an array when you are sure only one effect is present (for example, when querying the database).
+`     effect.get(name)     effect.get(name, index = -1)     effect.get(name, index = -1, jarr[])`
 
-##### Remarks
+#### Parameters
 
-json path search is case-sensitive, so _bless_ is different from _Bless_.
+-   `name`: effect name.
+-   `index`: which effect from the list. defaults to -1, which means the
+    whole array will be returned. Set it to 0 to avoid returning an
+    array when you are sure only one effect is present (for example,
+    when querying the database).
+-   `jarr`: array where to look up for `name`. If not specified, the
+    global DB is searched instead.
 
-Despite being called effect.get, this returns a json array, even if a single instance is found. If you are sure only one index is present, always set index to 0.
+#### Remarks
+
+json path search is case-sensitive, so *bless* is different from
+*Bless*.
+
+Despite being called effect.get, this returns a json array, even if a
+single instance is found. If you are sure only one index is present,
+always set index to 0.
 
 Same for any properties.
 
-##### Returns
-
-a json array or a json object with all the effects returned.
-
-
-<a id="effect.group"></a>
-### effect.group
-
-	effect.get(name)
-	effect.get(name, jarr[])
-
-Searches all effects in `jarr[]` or the global database belonging to the same group.
-
-##### Parameters
-
-* name: one or more group name(s), as a comma-separated list.
-* jarr : array where to look up for `name`. If not specified, the global DB is searched instead.
-
-##### Remarks
-
-json path search is case-sensitive, so _bless_ is different from _Bless_. Same for any properties.
-
-##### Returns
+#### Returns
 
 a json array with all the effects returned.
 
-<a id="effect.new"></a>
+[]{#effect.group}
+
+### effect.group
+
+Searches all effects in jarr\[\] or the global database belonging to the
+same group.
+
+#### Usage
+
+`     effect.get(name)     effect.get(name, jarr[])`
+
+#### Parameters
+
+-   `name`: one or more group name(s), as a comma-separated list.
+-   `jarr `: array where to look up for `name`. If not specified, the
+    global DB is searched instead.
+
+#### Remarks
+
+json path search is case-sensitive, so *bless* is different from
+*Bless*. Same for any properties.
+
+#### Returns
+
+a json array with all the effects returned.
+
+[]{#effect.new}
+
 ### effect.new
-```
-effect.new(name)
-effect.new(name, state)
-effect.new(name, state, effects[], group)
-```
 
 Creates a new effect json object.
 
-##### Parameters
+#### Usage
 
-* `name`: Effect name.
-* `state`: State to be bind to the effect. Empty string ("") for no state.
-* `effects`: a json array containing _mods_ to be bound to the effect. Valid options are a json array, a single json mod object, or an empty string.
-* `group`: a string for the effect's group.
+` effect.new(name) effect.new(name, state) effect.new(name, state, effects[], group)`
 
-##### Remarks
+#### Parameters
 
-While this is a simple call to json.set, it is to be preferred to raw json object handling as this can be used to easily expand effects, by overriding the function with `defineFunction()`.
+-   `name`: Effect name.
+-   `state`: State to be bind to the effect. Empty string (\"\") for no
+    state.
+-   `effects`: a json array containing *mods* to be bound to the effect.
+    Valid options are a json array, a single json mod object, or an
+    empty string.
+-   `group`: a string for the effect\'s group.
 
-##### Returns
+#### Remarks
 
-a new json effect object .
+While this is a simple call to json.set, it is to be preferred to raw
+json object handling as this can be used to easily expand effects, by
+overriding the function with `defineFunction()`.
 
-<a id="effect.remove"></a>
+#### Returns
+
+a new json effect object . []{#effect.remove}
+
 ### effect.remove
 
-```
-effect.remove(jarr, name, tokenID)
-```
+Removes an effect from an array or a token. Note that this will remove
+ALL effects with that name.
 
-Removes an effect. Note that this will remove ALL effects with that name.
+#### Usage
 
-##### Remarks
+` effect.remove(jarr, fxname) effect.remove(property, fxname, tokenID, mapID)`
 
-json path search is case-sensitive, so _bless_ is different from _Bless_. Same for any properties.
+#### Parameters
 
-Call mod.updateStatuses() to enable/disable statuses for a mod. if tokenID is specified, and the removed effect has a state, the state will be removed.
+-   `jarr[]`: a json array containing effects.
+-   `property`: name of the proprerty containing a json array.
+-   `tokenID`: (optional) name of the token containing `property`.
+-   `mapID`: (optional) name of the map containing `tokenID`.
 
-##### Returns
+#### Remarks
 
-modified jarr.
+json path search is case-sensitive, so *bless* is different from
+*Bless*. Same for any properties.
 
-<a id="effect.resolve"></a>
+The first form will simply remove an effect using jsonpath. The second
+form, which requires `tokenID`,will update the property and disable any
+effect bound to the effect.
+
+#### Returns
+
+modified `jarr`.[]{#effect.resolve}
+
 ### Effect.resolve
 
-effect.resolve(jarr)
-effect.resolve(jarr, database = "")
-effect.resolve(reference)
-effect.resolve(reference, database = "")
+Turns any *effect reference* into a full effect json object.
+` effect.resolve(jarr) effect.resolve(jarr, database = "") effect.resolve(reference) effect.resolve(reference, database = "")`
 
-Resolves any effect reference in the jarray.
+#### Parameters
 
-##### Parameters
+-   `jarray`: if the first parameter is a valid json mod/fx array, the
+    whole array will be resolved;
+-   `reference`: if the first paramater is a valid effect reference json
+    object, only that object will be resolved.
+-   `database`: optional, the database to use for reference resolution,
+    if \"\" it will be the global database.
 
-*   `jarray`: if the first parameter is a valid json mod/fx array, the whole array will be resolved;
-*   `reference`: if the first paramater is a valid effect reference json object, only that object will be resolved.
-*   `database`: optional, the database to use for reference resolution, if "" it will be the global database.
+#### Remarks
 
-##### Remarks
+This function is called automatically by mod.get but may be called by
+any functions that requires a full parse-able db.
 
-This function is called automatically by mod.get but may be called by any functions that requires a full parse-able db.
+This function should be called only if you are using *effect
+references*, otherwise it is meaningless. Any resolved reference is
+stored locally and won\'t respond to global database changes anymore.
 
-
-##### Returns
+#### Returns
 
 A json array with all references turned into a full effect object.
 
+[]{#effect.ui.manage}
 
-<a id="effect.ui.manage"></a>
-### effect.ui.manage
+### mod.ui.manage
 
-```
-effect.ui.manage()
-effect.ui.manage(tok, prop, title="Effect Manager", access="auto", group)
-```
+Opens a GUI editor to manage mods.
 
-This function opens a GUI editor to manage mods. This function may open the global effect library to the GM, if no selection is made, a specific editor to a _jarray_ or may show in bulk a mod property to a list of tokens (comma separated).
+If no token is opened, the global library is opened instead (GM Only).
 
-##### Parameters
+` effect.ui.manage() effect.ui.manage(tok, prop, title="Effect Manager", access="auto", group)`
 
-* `tok`: a string list (,) of tokens.
-* `prop`: only when parameter 0 is _tok_, the property to read. The property must be a valid json array.
-* `title`: when specified, allows customization of the tile.
-* `access`: Access clearance. see remarks. default value is "auto", which is "full" for gms and "view-only" for players.
-* `group`: only when access is _add-group_, a comma-separated list of groups to show.
+#### Parameters
 
-##### Remarks
+-   `tok`: a string list (,) of tokens.
+-   `prop`: only when parameter 0 is *tok*, the property to read. The
+    property must be a valid json array.
+-   `title`: when specified, allows customization of the tile.
+-   `access`: Access clearance. see remarks. default value is \"auto\",
+    which is \"full\" for gms and \"view-only\" for players.
+-   `group`: only when access is *add-group*, a comma-separated list of
+    groups to show.
 
-This GUI will prevent any unauthorized access to token properties. GM may edit any token, but any unowned token from `tok` will be stripped. The function will silently quit if no vald tokens remain on the list. the GUI may be customized with CSS (see `mod.configure`) Access mode allows user to define how much control on the gui is shown:
+#### Remarks
 
-* `view-only`: default for players, allows no modification.
-* `add-group`: allows add and remove from a specific group. `group` parameter must be specified.
-* `add-all`: allows add and remove from any group.
-* `full`: allows full control, including customization & edit
+This GUI will prevent any unauthorized access to token properties. GM
+may edit any token, but any unowned token from `tok` will be stripped.
 
-<a id="mod.get"></a>
+The macro will silently quit if no vald tokens remain on the list. the
+GUI may be customized with CSS (see `mod.configure`)
+
+Access mode allows user to define how much control on the gui is shown:
+
+-   `view-only`: default for players, allows no modification.
+-   `add-group`: allows add and remove from a specific group. `group`
+    parameter must be specified.
+-   `add-all`: allows add and remove from any group.
+-   `full`: allows full control, including customization & edit
+
+[]{#getModProperty}
+
+### getModProperty
+
+Returns a property value or property expression using the default mod
+property.
+
+#### Usage
+
+`mod.getProperty(property, scope)`
+`mod.getProperty(property, scope, token)`
+`mod.getProperty(property, token, map)`
+
+#### Parameters
+
+-   `property`: name of the property that you want to retrieve. beware
+    of case-sensitiveness.
+-   `scope`: the context you need this mod, i.e. check or save. Defaults
+    to *all*.
+-   `token`: Token id. Defaults to `currentToken()`.
+-   `map`: Map id. Defaults to `getCurrentMapName()`.
+
+#### Remarks
+
+Much like `mod.getProperty`, this macro will return a numeric value if
+the result mod is a mathematical expression and `forceString` is set to
+**0**.
+
+#### Returns
+
+The modified value or a string expression to be evaluated.[]{#getScore}
+
+### getScore
+
+Modifies a pure attribute score (as in d20\'s 3-18 attributes) and
+returns the roll modifier from the appropriate table.
+
+#### Usage
+
+` getScore(property) getScore(property, tokenID) getScore(property, tokenID, mapID)`
+
+#### Parameters
+
+-   `property`: the **name** of the attribute score property.
+-   `tokenID`: target token. defaults to `currentToken`.
+-   `mapID`: target token map. defaults to `getCurrentMapName`.
+
+#### Remarks
+
+for this function to work you need to check out `mod.ui.bindScores`.
+
+Scores, like table keys, should be numeric only in nature\
+- a string modifier will result in an error.
+
+#### Returns
+
+Either a modified score or the original attribute value. if Any mod
+resulting in a string instead of a number will return a string with all
+mods.
+
+#### See also
+
+`mod.getScore`
+
+[]{#isMod}
+
+### isMod
+
+Similar to json.type, returns a number detecting mod type.
+
+#### Usage
+
+`   isMod(object)`
+
+#### Returns
+
+1 if the object is a mod, 0 if it is an effect, -1 if it is not either a
+mod or an effect.[]{#json.getSafe}json.getSafe(value, type) returns an
+empty array or object if value is not of type.[]{#mod.eval}
+
+### mod.eval
+
+Create a new mod object inside a mod array.
+
+#### Usage
+
+`mod.eval(expression, mod[], scope)`
+`mod.eval(expression, modProperty, scope)`
+`mod.eval(expression, modProperty, scope, token)`
+`mod.eval(expression, modProperty, scope, token, map)`[]{#mod.get}
+
 ### mod.get
 
-```
-mod.get(jarr[], name,type="all", otherwise=0)
-```
+Returns the current modifier for a property or id inside a mod array.
 
-Gets the current mod for current token or token id. 0 is returned by default is the mod is not present. _type_ determines the mod category.
+#### Usage
 
-##### Parameter
+`   mod.get(jarr[], name)   mod.get(jarr[], name, type)   mod.get(jarr[], name, type="all", otherwise=0, optimize=0)`
 
-* `jarr` : the arry to look into
-* `name` : property or score nome
-* `type` : list separated by comma (,) of all requested roll types. Use 'all' for global scope properties.
-* `otherwise` : value to return if no mods is found
+#### Parameters
 
-##### Returns
+-   ` jarr `: the arry to look into
+-   ` name `: property or score nome
+-   ` type `: list separated by comma (,) of all requested roll types.
+    Use \'all\' for global scope properties.
+-   ` otherwise `: value to return if no mods is found
+-   `optimize`: by passing 1, this will consider `jarr` as it was
+    already called from a `getElements()` query. This is used internally
+    to avoid resolving and filtering multiple times.
 
-a numerical mod or the _otherwise_ parameter.
+#### Remarks
 
-##### Examples
+As of 1.1.0, `mod.get` will return a unparsed string if any non
+mathematical sign is found.
+
+This will return the operators (\* and /) first, and any other value
+then. Any other type of mod (i.e. value forcing) will be ignored as this
+is supposed to return any *buff*.
+
+#### Returns
+
+A number or a string expression with all the mods found or the original
+value.
+
+#### Examples
 
 Find from jarr any bonus/malus to fear saving throws:
+`mod = mod.get(jarr, "fear", "save", 0)` Find any bonus to thac0:
+`mod = mod.get(jarr, "thac0", "all", 0)`
 
-``mod = mod.get(jarr, "fear", "save", 0)``
+[]{#mod.getElements}
 
-Find any bonus to thac0:
+### mod.getElements
 
-``mod = mod.get(jarr, "thac0", "all", 0)``
+[Introduced in 1.1.0]{.small}
 
-<a id="mod.getProperty"></a>
+Gets the current mod json objects from `jarr[]`. an empty array is
+returned by default is no mod is present./
+
+#### Usage
+
+`mod.get(jarr[], name,type="all")`
+
+#### Parameters
+
+-   `jarr`: the arry to look into
+-   ` name `: property or score nome
+-   ` type `: list separated by comma (,) of all requested roll types.
+    Use \'all\' for global scope properties.
+
+#### Remarks
+
+json path search is case-sensitive, so *bless* is different from
+*Bless*. Same for any properties.
+
+This macro is useful if you plan to do multiple searches using active
+effects, as it reduces the effect array size.
+
+#### Returns
+
+A json array with all mod objects matching the query.
+
+[]{#mod.getInterfaceProperty}
+
+### mod.getInterfaceProperty
+
+Returns the property name for the mods as set in `mod.configure`.
+
+#### Returns
+
+The name of the property.[]{#mod.getProperty}
+
 ### mod.getProperty
 
-```
-mod.getProperty(property, modProperty[], scope="all", token="currentToken()", map="currentMap()")
-```
+Returns a property with all modifications applied. Unlike `mod.get` this
+will take value forcing into account.
 
-Returns a property with all modifications applied. Property is first converted with _mod.getScore_, then modified by a _mod.get_call using _scope_.
+#### Usage
 
-##### Parameters
+`   mod.getProperty(name, modProperty, scope)   mod.getProperty(name, jarr[], scope)      mod.getProperty(name, modProperty, scope, tokenID, mapID)   mod.getProperty(name, jarr[], scope, tokenID, mapID)`
 
-* `property`: token property name.
-* `jarr`: any mod pool you want to apply. You may use a _string_ instead of an array to trigger a `getProperty` on `token` parameter.
-* `scope`:may be any scope, "all" will search for all modifiers bound to that property.
-* `token`, `map`: as in getProperty()
+#### Parameters
 
-##### Remarks
+-   `name`: name of the property to be looked upon.
+-   `modProperty`: Property containing a json array from a token.
+-   `jarr[]`: a json array which will be used instead of `modProperty`.
+-   `scope`:may be any scope, \"all\" will search for all modifiers
+    bound to that property.
+-   `tokenID`: target token. defaults to `currentToken`.
+-   `mapID`: target token map. defaults to `getCurrentMapName`.
 
-json path search is case-sensitive, so _bless_ is different from _Bless_. Same for any properties.
+#### Remarks
 
-This will automatically convert any score into their mods. scope cannot be 'score'. if you want to get the pure attribute, do getProperty(property)+mod.get(property, "score").
+json path search is case-sensitive, so *bless* is different from
+*Bless*. Same for any properties.
 
-Note that this resolves the effect array towards the global database. If you need prior resolution towards a different database, call [effect.resolve] before calling this.
+`mod.getProperty` will first attemp to handle the property as a score.
+So, strength will be turned into a modifier, armor class will not. Then,
+he tries to apply any forcing to the value. The forcing algorithm may be
+defined using `mod.configure()`. Then any other mods are applied.
 
-##### Returns
+If the value of `property` is a string, no score translation will be
+attempted.
 
-A numerical value.
+#### Returns
 
-<a id="mod.getScore"></a>
+Either a numeric value or a string representing all mods.
+
+If any mod or forcing is non numerical or an operation, a string is
+returned.
+
+[]{#mod.getScore}
+
 ### mod.getScore
 
-```
-mod.getScore(prop, propertyMod[]="")
-mod.getScore(prop, propertyMod[]="", tokenID=currentToken, map=getCurrentMap())
-```
+Modifies a pure attribute score (as in d20\'s 3-18 attributes) and
+returns the roll modifier from the appropriate table.
 
-Gets, modifies and return a property bound as a score. searches for a table with `name` and gets the actual bonus/modifier. If it is not present, the raw value is returned.
+#### Usage
 
-##### Parameters
+` mod.getScore(property) mod.getScore(property,attributeMods[]) mod.getScore(property,attributeModProperty, tokenID, mapID)`
 
-* `prop`: the **name** of the property you want to change.
-* `propertyMod` : a json array with pure "score" mods. Pass empty string to avoid (""). If you pass a non empty-string, `getProperty` with `tokenID` as target will be called.
-* `tokenID` : the token, if different from the current token;
-* `map` : where to find `tokenID`, if specified.
+#### Parameters
 
-##### Remarks
+-   `property`: the **name** of the attribute score property.
+-   `attributeModProperty `: name of the property containing mods. Pass
+    empty string to avoid (\"\").
+-   `attributeMods[] `: external json array containing mods. Pass empty
+    string to avoid (\"\").
+-   `tokenID`: target token. defaults to `currentToken`.
+-   `mapID`: target token map. defaults to `getCurrentMapName`.
 
-json path search is case-sensitive, so _bless_ is different from _Bless_. Same for any properties.
+#### Remarks
 
-Scores have their own mod scope, the _score_. Any **direct** mod to the property value will be looked upon the "score" mod category.
+for this function to work you need to check out `mod.ui.bindScores`.
 
-Note that this will automatically call **mod.get** with the score mod, so you do not need to manually call it. You may avoid this by passing "" as jarr.
+json path search is case-sensitive, so *bless* is different from
+*Bless*. Same goes for any property.
 
-##### Returns
+Passing a mod array will call **mod.get** with the *score*type, so you
+do not need to manually call it.
 
-Either a modified score or the original attribute value.
+Scores, like table keys, should be numeric only in nature\
+- a string modifier will result in an error.
 
-##### Examples
+#### Returns
 
-Let's assume you have bound the Strength property to a 3.5 table, so 12=>+1, 18=>+3.
+Either a modified score or the original attribute value. if Any mod
+resulting in a string instead of a number will return a string with all
+mods.
 
-```
-[h: setProperty("STR", 18)]
-[r: mod.getScore("STR", "")]
-```
+#### Examples
 
-will return 3. Get the STR modifier, use the 'mods' property:
-
+Let\'s assume you have bound the Strength property to a 3.5 table, so
+12=\>+1, 18=\>+3.
+` [h: setProperty("STR", 18)] [r: mod.getScore("STR")]` will return 3.
+Get the STR modifier, use the \'mods\' property:
 `mod.getScore("STR", mods)`
 
-<a id="mod.set"></a>
+[]{#mod.pvt.getAvailableStates}
+
+### mod.pvt.getAvailableStates
+
+Returns a list of available states, grabbed from `getInfo`.
+
+#### Returns
+
+A comma separated string list.
+
+[]{#mod.set}
+
 ### mod.set
-```
-	mod.set(jarr[], properties, value, scope="all", replace=1)
-```
-##### Parameters
 
-* `jarr[]`: a json array with other mods. if null (""), the plain object will be returned.
-* `properties`: a **list (comma-separated)** containing property names to be buffed. The special keyword "all" will affect anything of the type.
-* `value`: a numeric value different from 0.
-* `scope`: use this to force specific buffs, such as "check" or "save". keyword "all" means buff everytime
-* `replace`: only if jarr is not null, replace any buff to the same property and type.
+Create a new mod object inside a mod array.
 
-##### Remarks
+#### Usage
 
-json path search is case-sensitive, so _bless_ is different from _Bless_. Same for any properties.
+`   mod.set("", properties, value)   mod.set("", properties, value, scope, replace)   mod.set(jarr[], properties, value)     mod.set(jarr[], properties, value, scope, replace)`
 
-Passing "" as first parameter is useful to just create mods.
+#### Parameters
 
-Note that replace will not replace a specific mod when passing 'all' as a scope, but will replace any mod with "all" scope instead.
+-   `jarr[]`: a json array with other mods. if null (\"\"), the plain
+    object will be returned.
+-   `properties`: a **list (comma-separated)** containing property names
+    to be buffed. The special keyword \"all\" will affect anything of
+    the type.
+-   `value`: a numeric value different from 0.
+-   `scope`: use this to force specific buffs, such as \"check\" or
+    \"save\". keyword \"all\" means buff everytime
+-   `replace`: only if jarr is not null, replace any buff to the same
+    property and type.
 
-By passing _all_ as a property, all queries to the same type will trigger this mod. Be careful not to add "all" both as a property and a scope or the mod will be always applied.
+#### Remarks
 
-Be careful when mixing mods and effects. queries may return bad results or replace the wrong mod.
+json path search is case-sensitive, so *bless* is different from
+*Bless*. Same for any properties.
 
-##### Returns
+Passing \"\" as first parameter is useful to just create mods.
+
+Note that replace will not replace a specific mod when passing \'all\'
+as a scope, but will replace any mod with \"all\" scope instead.
+
+By passing *all* as a property, all queries to the same type will
+trigger this mod. Be careful not to add \"all\" both as a property and a
+scope or the mod will be always applied.
+
+Be careful when mixing mods and effects. queries may return bad results
+or replace the wrong mod.
+
+#### Returns
 
 the new mod or jarr.
 
-##### Examples
+#### Examples
 
-+5 to Strength checks:
++5 to Strength checks: `mods = mod.set(mods, "Strength", 5, "check")` -1
+to anything using the Attack property:
+`mods = mod.set(mods, "Attack", -1)` Just create a \"+1 to Strength and
+Intelligence saves\" mod:
+` mod = mod.set("", "Strength, Intelligence", -1, "save")` -1 To all
+checks: ` mod = mod.set("", "all", -1, "check")`
 
-`mods = mod.set(mods, "Strength", 5, "check")`
+[]{#mod.setEffect}
 
--1 to anything using the Attack property:
-
-`mods = mod.set(mods, "Attack", -1)`
-
-Just create a "+1 to Strength and Intelligence saves" mod:
-
-` mod = mod.set("", "Strength, Intelligence", -1, "save")`
-
--1 To all checks:
-
-` mod = mod.set("", "all", -1, "check")`
-
-<a id="mod.setEffect"></a>
 ### mod.setEffect
 
-```
-mod.setEffect(effect, value, property, tokenID=currentToken, map=getCurrentMapName())
-```
+Sets an effect on a token, enabling a state if necessary.
 
-Sets an effect mimicking the setState function.
+#### Usage
 
-##### Parameters
+` mod.setEffect(effect, value, property) mod.setEffect(effect, value, property, tokenID) mod.setEffect(effect, value, property, tokenID, map)`
 
-* `effect`: either a json effect object, a or a string with an existing effect on the token or an effect on the global database.
-* `value`: either 1 (enable, default) or 0 (disable/remove);
-* `property`: name of the property containing a json array for effects.
-* `tokenID`: token to be effected with this state. defaults to current Token.
-* `map`: map where the token is. defaults to current map.
+#### Parameters
 
-##### Remarks
+-   `effect`: either a json effect object, a or a string with an
+    existing effect on the token or an effect on the global database.
+-   `value`: either 1 (enable, default) or 0 (disable/remove);
+-   `property`: name of the property containing a json array for
+    effects.
+-   `tokenID`: token to be effected with this state. defaults to current
+    Token.
+-   `map`: map where the token is. defaults to current map.
 
-json path search is case-sensitive, so _bless_ is different from _Bless_. Same for any properties.
+#### Remarks
 
-This will automatically add or remove (depending on _value_) an effect to a property _property_ inside a token.
+json path search is case-sensitive, so *bless* is different from
+*Bless*. Same for any properties.
 
-Effect may be a custom effect (see effect.add) or a string for an existing effect.
+This will automatically add or remove (depending on *value*) an effect
+to a property *property* inside a token.
 
-This functions will check out if _effect_ has a state bound to it, and will turn the effect on or off depending on _value_. the state will be set even if the property already conatins such effect.
+Effect may be a custom effect (see effect.add) or a string for an
+existing effect.
 
-##### Returns
+This functions will check out if *effect* has a state bound to it, and
+will turn the effect on or off depending on *value*. the state will be
+set even if the property already conatins such effect.
 
-Returns 1 if the operation was possibile (the effect wasn't present before adding or was present before removing).
+#### Returns
 
-<a id="mod.toString"></a>
+Returns 1 if the operation was possibile (the effect wasn\'t present
+before adding or was present before removing). []{#mod.setForceString}
+
+### mod.setForceString
+
+sets if mod evaluations should return a formula or a number.
+
+#### Usage
+
+` mod.setForceString(forceString)`
+
+#### Parameters
+
+-   `forceString`: 1 if all macros should return a string, 0 otherwise.
+
+#### Remarks
+
+This value may be set also in `mod.configure`. []{#mod.toString}
+
 ### mod.toString
-
-```
-mod.string(mod{})
-```
 
 Turns a mod object into a human readable string.
 
-##### Parameters
+#### Usage
 
-* `mod`: a json mod object.
+` mod.string(mod{})`
 
-##### Returns
+#### Parameters
 
-A string.
+-   `mod`: a json mod object.
 
-<a id="mod.bindScores"></a>
+#### Returns
+
+A string.[]{#mod.ui.bindScores}
+
 ### mod.ui.bindScores
 
-`mod.ui.bindScores()`
+This function will call the *Score to table* bind editor.
 
-This function will call the _Score to table_ bind editor.
+#### Usage
 
-<a id="mod.ui.edit"></a>
-### mod.ui.edit
+`mod.ui.bindScores()` []{#mod.ui.edit}
 
-```
-mod.ui.edit(mod)
-mod.ui.edit(jarr)
-mod.ui.edit(jarr, index)
-```
+#### mod.ui.edit
 
+` mod.ui.edit(mod) mod.ui.edit(jarr[]) mod.ui.edit(jarr[], index)`
 Graphical editor for a mod.
 
-##### Parameters
+#### Parameters
 
-* `mod` - name of a mod , a json mod object or an empty json object "{}".
-* `jarr`· - an array containing any mods.
-* `index` - required with jarr, the index of the mod you intend to edit.
+-   `mod`: name of a mod , a json mod object or an empty json object
+    \"{}\".
+-   `jarr`: an array containing any mods.
+-   `index`: required with jarr, the index of the mod you intend to
+    edit.
 
-##### Remarks
+#### Remarks
 
 Setting a value of **0** will remove the mod from jarr.
 
-##### Returns
+#### Returns
 
-if `mod` has been passed as an argument, it returns the new mod object. otherwise `jarr` is returned.
-
+if `mod` has been passed as an argument, it returns the new mod object.
+otherwise `jarr`is returned.

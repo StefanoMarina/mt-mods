@@ -7,10 +7,12 @@
 	case "OBJECT" : fxes = json.append("[]", fxes);
 	default: "" ]
 
-[h: macro.return = json.set("{}",
+[h: retObj = json.set("{}",
 	"type", "effect",
 	"group", group,
 	"name", arg(0),
 	"state", state,
 	"effects", fxes)
 ]
+
+[h: macro.return = retObj]

@@ -29,8 +29,8 @@
 	"macros": {
 		"folder" : "library/mtscript/public",
 		"map" : "macro_script_map.txt",
-    "updatePropertiesFile": 1,
-		"exclude": ["onCampaignLoad"],
+    "updatePropertiesFile": 0,
+		"exclude": ["onCampaignLoad", "Edit buffs", "Effect Library", "Effects"],
 		"include" : []
 	},
 	"events.json": {
@@ -40,6 +40,6 @@
 	  ]
 	},
   "zip" : {
-    "exclude" : ["CHANGELOG.md"]
+    "exclude" : ["CHANGELOG.md", "documentation", "documentation/*.*", "jsonExporter.xsl", "*.pl"]
   }
 }

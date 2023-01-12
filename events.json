@@ -1,12 +1,12 @@
 {
    "events" : [
       {
-         "mts" : "onFirstInit",
-         "name" : "onFirstInit"
+         "name" : "onFirstInit",
+         "mts" : "onFirstInit"
       },
       {
-         "mts" : "onInit",
-         "name" : "onInit"
+         "name" : "onInit",
+         "mts" : "onInit"
       }
    ]
 }
