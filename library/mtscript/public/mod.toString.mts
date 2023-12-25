@@ -1,10 +1,11 @@
 [h: mod = arg(0)]
 
-[h: macro.return = strformat("%+d to %s %s",
-	json.get(mod, "value"),
-	json.get(mod, "property"),
-	if (!listContains("all, score", json.get(mod, "type")), 
-		json.get(mod, "type") + "s", "")
-		)]
+[h: json.toVars(mod, "mod")]
+[h, if (isNumber(modValue)): modPrint = "%+d"; modPrint = "%s"]
+
+[h: macro.return = strformat(modPrint+" to %{modProperty} %s",
+	modValue,
+	if (!listContains("all, score", modType), modType + "s", "")
+)]
 
 		

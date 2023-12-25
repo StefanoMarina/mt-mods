@@ -16,7 +16,7 @@
 	[h: fxobj = json.get(fxobjQ, 0)]
 };{
 	[h: fxobj = fxArg]
-}] [h:getTokens
+}] 
 
 [h, if (fxReplace): 
 	jarr = json.path.delete(jarr, 

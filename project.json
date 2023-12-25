@@ -1,18 +1,16 @@
 {
+  "name" : "LibMod",
+  "documentation" : "token",
   "changeLoadToInit" : 0,
   "autoExpose" : {
-    "enabled" : 1,
+    "install" : "ignore",
     "defaultShowOutput" : 1,
     "showOutput" : [],
-    "include" : [],
-    "exclude" : [
-        "printCSS", "etmUpdate", "effectEditorUpdate", 
-        "bindScoresUpdate", "openDatabaseUpdate", "Configure",
-        "onCampaignLoad", "onFirstInitialization", "effectEditor",
-        "effectsLibrary", "effectsTokenManager", "openDatabase", "bindScores"
-    ]
+    "includeFilter": "public",
+    "include" : ["^mod\\.pvt.*$","json\\.getSafe"],
+    "exclude" : ["Configure", "openDatabase"]
   },
-    "library.json" : {
+  "library.json" : {
      "authors" : ["Witness1"],
      "name" : "Lib:Mod",
      "licenseFile" : "LICENSE.TXT",
@@ -21,18 +19,25 @@
      "namespace" : "w1.lmod",
      "allowsUriAccess" : true,
      "website" : "https://github.com/StefanoMarina/mt-mods",
-     "version" : "1.1.0",
+     "version" : "1.2.0",
      "readMeFile" : "README.md",
-     "description" : "LibMod allows certain d20 operations such as raw stat to modifier (ie. 15=>+1), and management of modifiers, buffs and effects.",
+     "description" : "LibMod allows certain d20 operations such as raw stat to modifier (ie. Strength 15 equals +1), and management of modifiers, buffs and effects.",
      "gitUrl" : "https://github.com/StefanoMarina/mt-mods.git"
   },
-	"macros": {
-		"folder" : "library/mtscript/public",
-		"map" : "macro_script_map.txt",
-    "updatePropertiesFile": 0,
-		"exclude": ["onCampaignLoad", "Edit buffs", "Effect Library", "Effects"],
-		"include" : []
-	},
+  "rename" : {
+    "public" : {
+      "folder" : "library/mtscript/public",
+  		"map" : "macro_script_map.txt",  
+  		"include" : ["^effect\\..*$", "^mod\\.(?!pvt).*$", "get.*", "setEffect", "onInit", "onFirst.*", "Configure", "openDatabase$", "isMod"]
+    },
+    "private": {
+      "sourceFolder": "library/mtscript/public",
+      "folder" : "library/mtscript",
+  		"map" : "macro_script_map.txt",
+  		"excludeFilter" : "public",
+  		"exclude" : ["^Edit buffs$", "^Effect Library$", "^Effects$", "onCampaignLoad"]
+    }
+  },
 	"events.json": {
 	  "events" : [
       { "name" : "onFirstInit", "mts" : "onFirstInit" },
@@ -40,6 +45,6 @@
 	  ]
 	},
   "zip" : {
-    "exclude" : ["CHANGELOG.md", "documentation", "documentation/*.*", "jsonExporter.xsl", "*.pl"]
+    "exclude" : ["*.md"]
   }
 }

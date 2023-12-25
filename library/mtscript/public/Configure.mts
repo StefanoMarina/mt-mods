@@ -7,7 +7,8 @@
 
 [h: json.toVars(jobj, "")]
 
-[h: PTAG= "<p style='width: 350px'>"]
+[h: PTAG= "<p style='width: 400px'>"]
+[h: OTAG= "<p style='width: 400px margin-bottom:5px'>"]
 
 [h: welcomeTab = strformat("jnk|<html><h2>Welcome</h2>%{ptag}Welcome to <i>Mod</i> additional component.</p>"
 + "%{ptag}Please go through all of the tabs and set the component's requirements.</p>"
@@ -24,10 +25,11 @@
 )]
 
 [h: bindTab = strformat("jnkTitle|<html><h3>Property behaviour</h3>"+
-"%{ptag}You may select how to handle certain behaviours from buff stacking here.</p>||LABEL|SPAN=TRUE##"+
-"defModProperty|%{defModProperty}|Default property (interface only)##"+
+"%{otag}You may select how to handle certain behaviours from buff stacking here.</p>||LABEL|SPAN=TRUE##"+
 "forceString|%{forceString}|Always return an expression instead of value|CHECK##"+
 "forceSortMethod|A+,A-,N-|Sort force multiple values|RADIO|ORIENT=H SELECT=%d ##" +
+"defModProperty|%{defModProperty}|<html>Default property##"+
+"jnk|<html>%{ptag}<small>(Default property works on interface and getModProperty only, please ensure is <code>[]</code> by default)||LABEL|SPAN=TRUE##"+
 "jnkTitle2|<html><h3>Effect groups</h3>"+
 "%{ptag}Groups allow easy searching and classification of effects, i.e. <i>Combat</i> or <i>Spells</i>. Add groups as a comma separated list. <i>all</i> is reserved|-|LABEL|SPAN=TRUE ##" +
 "groupsList|%{groupsList}|Groups|TEXT"

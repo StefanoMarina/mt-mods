@@ -10,7 +10,7 @@
 [h, foreach (prop, props): expression = 
 	replace ( expression, strformat("\\b(i?)%{prop}\\b"), mod.getProperty(prop, modID, scope, tkID, mapID) ) ]
 
-[h, if (!getLibProperty("forceString") && matches (expression, "^[ \\{\\}\\[\\]\\(\\)\\d\\.\\+\\-\\*\\/]+\$")):
+[h, if (!getLibProperty("forceString") && matches (expression, "^[ \\(\\)\\d\\.\\+\\-\\*\\/]+\$")):
 	macro.return = eval(expression);
 	macro.return = expression
 ]

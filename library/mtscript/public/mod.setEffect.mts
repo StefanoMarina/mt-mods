@@ -16,23 +16,24 @@
 	]
 };{}]
 
-[h: '<!-- resolve any reference -->']
-[h: rfx = effect.resolve(fx)]
+[h: '<!-- quit if requesting to disable a non existent fx -->']
+[h: return( value || fx != "", 0)]
 
-[h: log.debug(string(fx))]
-[h: log.debug(string(rfx))]
+[h: '<!-- on global effect, resolve any reference -->']
+[h, if (value || json.contains(fx, "ref")): rfx = effect.resolve(fx); rfx = fx]
 
 [h, if (json.type(rfx) == "ARRAY"), code: {
 	[return(json.length(rfx)>0, 0)]
 	[rfx = json.get(rfx, 0)]
 }]
 
+[h: assert( json.type(fx) == "OBJECT", "mod.setEffect: bad object " + string(fx))]
 [h: fxname = json.get(fx, "name")]
 [h: contains = effect.contains(prop, fxname)]
 
 [h, if (value) : 
 	prop =  if (contains, prop, json.append(prop, fx));
-	prop = effect.remove(prop, fxname)
+	prop = effect.remove(prop, fxname, tokenID, map)
 ]
 
 [h: setProperty(property, prop, tokenID, map)]

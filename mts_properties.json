@@ -1,179 +1,254 @@
 {
-    "properties" : [
-{
-"filename": "public/Configure.mts",
-"autoExecute": true,
-"description": "<html><h4>mod.configure</h4><code>mod.configure()</h4><p>Opens the mod configuration panel.</p>"},
-{
-"filename": "public/Edit buffs.mts",
-"autoExecute": true,
-"description": ""},
-{
-"filename": "public/Effect Library.mts",
-"autoExecute": true,
-"description": ""},
-{
-"filename": "public/Effects.mts",
-"autoExecute": true,
-"description": ""},
-{
-"filename": "public/bindScores.mts",
-"autoExecute": true,
-"description": "creates a bind between an attribute and a table, i.e. STR,WIS,DEX->attributes"},
-{
-"filename": "public/bindScoresUpdate.mts",
-"autoExecute": true,
-"description": ""},
-{
-"filename": "public/effect.add.mts",
-"autoExecute": true,
-"description": "<html><h3>effect.add</h3><p>Stores into <code>jarr</code> a new effect, either retrieving it from the global database orby creating from scratch.</p><h4>Usage</h4><code>effect.add(jarr[], fx)effect.add(jarr[], fx, replace=0)</code><h4>Parameters</h4><ul>\\t<li><code>jarr[]</code>: a json array where the object will be stored.</li>\\t<li><code>fx</code>: either a string for the effect name or an effect json object to be added.</li>\\t<li><code>replace</code>: if true (1), macro will replace any effect with a similar effect inside <code>jarr</code>. The effect will be stacked otherwise.</li></ul><h4>Remarks</h4><p>This is most useful as a quick way to add fxes from the database. however, json.path search is case-sensitive, so <code>bless</code> is different from <code>Bless</code>. Same goes for any properties.</p><p>The name property is used to look inside the general DB when <code>effects</code> is not set.</p><h4>Returns</h4><p>The expanded <code>jarr</code> array.</p>"},
-{
-"filename": "public/effect.asReference.mts",
-"autoExecute": true,
-"description": "<html><h3>effect.asReference</h3>A wrap-up to create an <i>effect reference</i> to a global effect. This ensures object integrity.<h4>Usage</h4><code>effect.asReference(fxName)</code><h4>Parameters</h4><ul>\\t<li><code>fxName</code>: name of the global effect</li></ul><h4>Remarks</h4><p>This creates an effect reference to a global effect instead of a real effect, meaning the array must be resolved againt references beforeretrieving all mods. this is done automatically by <code>mod.get</code>, see <code>effect.resolve</code> for more info.</p><p>json path search is case-sensitive, so <code>bless</code> is different from <code>Bless</code>. Same for any properties.</p><h4>Returns</h4><p>a json <i>Effect reference</i> object.</p>"},
-{
-"filename": "public/effect.contains.mts",
-"autoExecute": true,
-"description": "<html><h3>effect.contains</h3>Utility to check if an effect is inside a json narray.<h4>Usage</h4><code>  effect.contains(jarr, effectName)</code><h4>Parameters</h4><ul><li><code>jarr</code>: a valid json array</li><li><code>effect</code>: either a json effect object, a or a string with an existing effect on the token or an effect on the global database.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><h4>Returns</h4>1 if the effect is present, 0 otherwise."},
-{
-"filename": "public/effect.get.mts",
-"autoExecute": true,
-"description": "<html><h3>effect.get</h3><p>Returns a json list of effects matching <code>name</code>.\\tIf an effect has multiple entries, all entries are returned.</p><h4>Usage</h4><code>\\teffect.get(name)\\teffect.get(name, index = -1)\\teffect.get(name, index = -1, jarr[])</code><h4>Parameters</h4><ul>\\t<li><code>name</code>: effect name.</li>\\t<li><code>index</code>: which effect from the list. defaults to -1, which means the whole array will be returned. Set it to 0 to avoid returning an array when\\tyou are sure only one effect is present (for example, when querying the database).</li>  <li><code>jarr</code>: array where to look up for <code>name</code>. If not specified, the global DB is searched instead.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.<p>Despite being called effect.get, this returns a json array, even if a single instance is found. If you are sureonly one index is present, always set index to 0.</p>Same for any properties.</p><h4>Returns</h4><p>a json array with all the effects returned.</p>"},
-{
-"filename": "public/effect.group.mts",
-"autoExecute": true,
-"description": "<html><h3>effect.group</h3><p>Searches all effects in jarr[] or the global database belonging to the same group.</p><h4>Usage</h4><code>\\teffect.get(name)\\teffect.get(name, jarr[])</code><h4>Parameters</h4><ul>\\t<li><code>name</code>: one or more group name(s), as a comma-separated list.</li>\\t<li><code>jarr </code>: array where to look up for <code>name</code>. If not specified, the global DB is searched instead.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><h4>Returns</h4><p>a json array with all the effects returned.</p>"},
-{
-"filename": "public/effect.new.mts",
-"autoExecute": true,
-"description": "<html><h3>effect.new</h3>Creates a new effect json object.<h4>Usage</h4><code>effect.new(name)effect.new(name, state)effect.new(name, state, effects[], group)</code><h4>Parameters</h4><ul>\\t<li><code>name</code>: Effect name. </li>\\t<li><code>state</code>: State to be bind to the effect. Empty string ('') for no state.</li>\\t<li><code>effects</code>: a json array containing <em>mods</em> to be bound to the effect. Valid options are a json array, a single json mod object, or an empty string.</li>\\t<li><code>group</code>: a string for the effect's group.</li></ul><h4>Remarks</h4>While this is a simple call to json.set, it is to be preferred to raw jsonobject handling as this can be used to easily expand effects, by overridingthe function with <code>defineFunction()</code>.<h4>Returns</h4>a new json effect object ."},
-{
-"filename": "public/effect.remove.mts",
-"autoExecute": true,
-"description": "<html><h3>effect.remove</h3>Removes an effect from an array or a token. Note that this will remove ALL effects with that name.<h4>Usage</h4><code>effect.remove(jarr, fxname)effect.remove(property, fxname, tokenID, mapID)</code><h4>Parameters</h4><ul>  <li><code>jarr[]</code>: a json array containing effects.</li>  <li><code>property</code>:  name of the proprerty containing a json array.</li>  <li><code>tokenID</code>: (optional) name of the token containing <code>property</code>.</li>  <li><code>mapID</code>: (optional) name of the map containing <code>tokenID</code>.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p>The first form will simply remove an effect using jsonpath. The second form, which requires <code>tokenID</code>,will update the property and disable any effect bound to the effect.</p><h4>Returns</h4>modified <code>jarr</code>."},
-{
-"filename": "public/effect.resolve.mts",
-"autoExecute": true,
-"description": "<html><h3>Effect.resolve</h3>Turns any <i>effect reference</i> into a full effect json object.<code>effect.resolve(jarr)effect.resolve(jarr, database = '')effect.resolve(reference)effect.resolve(reference, database = '')</code><h4>Parameters</h4><ul>  <li><code>jarray</code>: if the first parameter is a valid json mod/fx array, the whole array will be resolved;</li>  <li><code>reference</code>: if the first paramater is a valid effect reference json object, only that object will be resolved.</li>  <li><code>database</code>: optional, the database to use for reference resolution, if '' it will be the global database.</li></ul><h4>Remarks</h4><p>This function is called automatically by mod.get but may be called by any functions that requires a full parse-able db.</p><p>This function should be called only if you are using <i>effect references</i>, otherwise it is meaningless. Any resolved reference is stored locally and won't respond to global database changes anymore.<h4>Returns</h4><p>A json array with all references turned into a full effect object.</p>"},
-{
-"filename": "public/effect.ui.manage.mts",
-"autoExecute": true,
-"description": "<html><h3>mod.ui.manage</h3><p>Opens a GUI editor to manage mods.</o><p>If no token is opened, the global library is opened instead (GM Only).</p><code>effect.ui.manage()effect.ui.manage(tok, prop, title='Effect Manager', access='auto', group)</code><h4>Parameters</h4><ul>\\t<li><code>tok</code>: a string list (,) of tokens.</li>\\t<li><code>prop</code>: only when parameter 0 is <em>tok</em>, the property to read. The property must be a valid json array.</li> \\t<li><code>title</code>: when specified, allows customization of the tile.</li>\\t<li><code>access</code>: Access clearance. see remarks. default value is 'auto', which is 'full' for gms and 'view-only' for players.</li>\\t<li><code>group</code>: only when access is <em>add-group</em>, a comma-separated list of groups to show.</li></ul><h4>Remarks</h4><p>This GUI will prevent any unauthorized access to token properties. GM may edit any token, but any unowned token from <code>tok</code> will be stripped.</p><p>The macro will silently quit if no vald tokens remain on the list.the GUI may be customized with CSS (see <code>mod.configure</code>)</p>Access mode allows user to define how much control on the gui is shown:<ul><li><code>view-only</code>: default for players, allows no modification.</li><li><code>add-group</code>: allows add and remove from a specific group. <code>group</code> parameter must be specified.</li><li><code>add-all</code>: allows add and remove from any group. </li><li><code>full</code>: allows full control, including customization &amp; edit</li>.</ul>"},
-{
-"filename": "public/effectEditor.mts",
-"autoExecute": true,
-"description": "<html>Effect editor GUI.arguments must be passed as json object.<pre>{\\ttokenID : '##lib##' for library, or token List\\tproperty: if tokenID is a token, property must be defined\\teffect : valid effect object\\tdisableName : disable name change (remove key to enable)\\treplaces : original effect name (db only)\\tname : current effect name}</pre>expredect args as json object: effect, linkToUpdate"},
-{
-"filename": "public/effectEditorUpdate.mts",
-"autoExecute": true,
-"description": ""},
-{
-"filename": "public/effectsLibrary.mts",
-"autoExecute": true,
-"description": ""},
-{
-"filename": "public/effectsTokenManager.mts",
-"autoExecute": true,
-"description": "<html>json object for parameters.<code>{\\ttokenID : empty, '##renew##' or a token string list\\tproperty: property containing a valid json array\\ttitle : title of the dialog}</code>"},
-{
-"filename": "public/etmUpdate.mts",
-"autoExecute": true,
-"description": ""},
-{
-"filename": "public/getModProperty.mts",
-"autoExecute": true,
-"description": "<html><h3>getModProperty</h3>Returns a property value or property expression using the default mod property.<h4>Usage</h4><code>mod.getProperty(property, scope)</code><code>mod.getProperty(property, scope, token)</code><code>mod.getProperty(property, token, map)</code><h4>Parameters</h4><ul><li><code>property</code>: name of the property that you want to retrieve. beware of case-sensitiveness.</code></li><li><code>scope</code>: the context you need this mod, i.e. check or save. Defaults to <i>all</i>.</li><li><code>token</code>: Token id. Defaults to <code>currentToken()</code>.</li><li><code>map</code>: Map id. Defaults to <code>getCurrentMapName()</code>.</li></ul><h4>Remarks</h4><p>Much like <code>mod.getProperty</code>, this macro will return a numeric value if the result mod is a mathematical expressionand <code>forceString</code> is set to <b>0</b>.</p><h4>Returns</h4>The modified value or a string expression to be evaluated."},
-{
-"filename": "public/getScore.mts",
-"autoExecute": true,
-"description": "<html><body><h3>getScore</h3><p>Modifies a pure attribute score (as in d20's 3-18 attributes) and returns the roll modifier from the appropriate table.</p><h4>Usage</h4><code>getScore(property)getScore(property, tokenID)getScore(property, tokenID, mapID)</code><h4>Parameters</h4><ul>  <li><code>property</code>: the <b>name</b> of the attribute score property.</li>  <li><code>tokenID</code>: target token. defaults to <code>currentToken</code>.</li>  <li><code>mapID</code>: target token map. defaults to <code>getCurrentMapName</code>.</li></ul><h4>Remarks</h4><p>for this function to work you need to check out <code>mod.ui.bindScores</code>.</p><p>Scores, like table keys, should be numeric only in nature <br/>- a string modifier will result in an error.</p><h4>Returns</h4><p>Either a modified score or the original attribute value. if Any mod resulting in a string instead of a number will return a string with all mods.</p><h4>See also</h4><code>mod.getScore</code></body></html>"},
-{
-"filename": "public/isMod.mts",
-"autoExecute": true,
-"description": "<html><body><h3>isMod</h3><p>Similar to json.type, returns a number detecting mod type.</p><h4>Usage</h4><code>  isMod(object)</code><h4>Returns</h4>1 if the object is a mod, 0 if it is an effect, -1 if it is not either a mod or an effect."},
-{
-"filename": "public/json.getSafe.mts",
-"autoExecute": true,
-"description": "json.getSafe(value, type)returns an empty array or object if value is not of type."},
-{
-"filename": "public/mod.eval.mts",
-"autoExecute": true,
-"description": "<html><body><h3>mod.eval</h3>Create a new mod object inside a mod array.<h4>Usage</h4><code>mod.eval(expression, mod[], scope)</code><code>mod.eval(expression, modProperty, scope)</code><code>mod.eval(expression, modProperty, scope, token)</code><code>mod.eval(expression, modProperty, scope, token, map)</code>"},
-{
-"filename": "public/mod.get.mts",
-"autoExecute": true,
-"description": "<html><body><h3>mod.get</h3><p>Returns the current modifier for a property or id inside a mod array.</p><h4>Usage</h4><code>  mod.get(jarr[], name)  mod.get(jarr[], name, type)  mod.get(jarr[], name, type='all', otherwise=0, optimize=0)</code><h4>Parameters</h4><ul>  <li><code> jarr </code>: the arry to look into</li>  <li><code> name </code>: property or score nome</li>  <li><code> type </code>: list separated by comma (,) of all requested roll types. Use 'all' for global scope properties.</li>  <li><code> otherwise </code>: value to return if no mods is found</li>  <li><code>optimize</code>: by passing 1, this will consider <code>jarr</code> as it was already called from a <code>getElements()</code> query. This is used internally to avoid resolving and filtering multiple times.</li></ul><h4>Remarks</h4><p>As of 1.1.0, <code>mod.get</code> will return a unparsed string if any non mathematical sign is found.</p><p>This will return the operators (* and /) first, and any other value then. Any other type of mod (i.e. value forcing) will be ignored as this is supposed to return any <i>buff</i>.</p><h4>Returns</h4>  <p>A number or a string expression with all the mods found or the original value.</p><h4>Examples</h4>Find from jarr any bonus/malus to fear saving throws:  <code>mod = mod.get(jarr, 'fear', 'save', 0)</code>Find any bonus to thac0:  <code>mod = mod.get(jarr, 'thac0', 'all', 0)</code></body></html>"},
-{
-"filename": "public/mod.getElements.mts",
-"autoExecute": true,
-"description": "<html><body><h3>mod.getElements</h3><p><small>Introduced in 1.1.0</small></p><p>Gets the current mod json objects from <code>jarr[]</code>. an empty array is returned by default is no mod is present./<p><h4>Usage</h4><code>mod.get(jarr[], name,type='all')</code><h4>Parameters</h4><ul><li><code><code>jarr</code></code>: the arry to look into</li><li><code> name </code>: property or score nome</li><li><code> type </code>: list separated by comma (,) of all requested roll types. Use 'all' for global scope properties.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p>This macro is useful if you plan to do multiple searches using active effects, as it reduces the effect array size.</p><h4>Returns</h4><p>A json array with all mod objects matching the query.</p></body></html>"},
-{
-"filename": "public/mod.getInterfaceProperty.mts",
-"autoExecute": true,
-"description": "<html><h3>mod.getInterfaceProperty</h3>Returns the property name for the mods as set in <code>mod.configure</code>.<h4>Returns</h4>The name of the property."},
-{
-"filename": "public/mod.getProperty.mts",
-"autoExecute": true,
-"description": "<html><h3>mod.getProperty</h3><p>Returns a property with all modifications applied. Unlike <code>mod.get</code> this will take value forcing into account.</p><h4>Usage</h4><code>  mod.getProperty(name, modProperty, scope)  mod.getProperty(name, jarr[], scope)    mod.getProperty(name, modProperty, scope, tokenID, mapID)  mod.getProperty(name, jarr[], scope, tokenID, mapID)</code><h4>Parameters</h4><ul>  <li><code>name</code>: name of the property to be looked upon.</li>  <li><code>modProperty</code>: Property containing a json array from a token.</li>  <li><code>jarr[]</code>: a json array which will be used instead of <code>modProperty</code>.</li>  <li><code>scope</code>:may be any scope, 'all' will search for all modifiers bound to that property.</li>  <li><code>tokenID</code>: target token. defaults to <code>currentToken</code>.</li>  <li><code>mapID</code>: target token map. defaults to <code>getCurrentMapName</code>.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p><code>mod.getProperty</code> will first attemp to handle the property as a score. So, strength will be turned into a modifier, armor class will not. Then, he tries to apply any forcing to the value. The forcing algorithm may be defined using <code>mod.configure()</code>. Then any other mods are applied.<p>If the value of <code>property</code> is a string, no score translation will be attempted.</p><h4>Returns</h4><p>Either a numeric value or a string representing all mods.</p><p>If any mod or forcing is non numerical or an operation, a string is returned.</p>"},
-{
-"filename": "public/mod.getScore.mts",
-"autoExecute": true,
-"description": "<html><body><h3>mod.getScore</h3><p>Modifies a pure attribute score (as in d20's 3-18 attributes) and returns the roll modifier from theappropriate table.</p><h4>Usage</h4><code>mod.getScore(property)mod.getScore(property,attributeMods[])mod.getScore(property,attributeModProperty, tokenID, mapID)</code><h4>Parameters</h4><ul>  <li><code>property</code>: the <b>name</b> of the attribute score property.</li>  <li><code>attributeModProperty </code>: name of the property containing mods. Pass empty string to avoid ('').</li>  <li><code>attributeMods[] </code>: external json array containing mods. Pass empty string to avoid ('').</li>  <li><code>tokenID</code>: target token. defaults to <code>currentToken</code>.</li>  <li><code>mapID</code>: target token map. defaults to <code>getCurrentMapName</code>.</li></ul><h4>Remarks</h4><p>for this function to work you need to check out <code>mod.ui.bindScores</code>.</p><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>. Same goes for any property.</p><p>Passing a mod array will call <b>mod.get</b> with the <em>score</em>type, so you do not need to manually call it. </p><p>Scores, like table keys, should be numeric only in nature <br/>- a string modifier will result in an error.</p><h4>Returns</h4><p>Either a modified score or the original attribute value. if Any mod resulting in a string instead of a number will return a string with all mods.</p><h4>Examples</h4>Let's assume you have bound the Strength property to a 3.5 table, so 12=>+1, 18=>+3.<code>[h: setProperty('STR', 18)][r: mod.getScore('STR')]</code>will return 3.Get the STR modifier, use the 'mods' property:<code>mod.getScore('STR', mods)</code></body></html>"},
-{
-"filename": "public/mod.pvt.getAvailableStates.mts",
-"autoExecute": true,
-"description": "<html><body><h3>mod.pvt.getAvailableStates</h3><p>Returns a list of available states, grabbed from <code>getInfo</code>.</p><h4>Returns</h4>A comma separated string list.</body><html>"},
-{
-"filename": "public/mod.set.mts",
-"autoExecute": true,
-"description": "<html><body><h3>mod.set</h3>Create a new mod object inside a mod array.<h4>Usage</h4><code>  mod.set('', properties, value)  mod.set('', properties, value, scope, replace)  mod.set(jarr[], properties, value)\\tmod.set(jarr[], properties, value, scope, replace)</code><h4>Parameters</h4><ul>  <li><code>jarr[]</code>: a json array with other mods. if null (''), the plain object will be returned.</li>  <li><code>properties</code>: a <b>list (comma-separated)</b> containing property names to be buffed. The special keyword 'all' will affectanything of the type.</li>  <li><code>value</code>: a numeric value different from 0.</li>  <li><code>scope</code>: use this to force specific buffs, such as 'check' or 'save'. keyword 'all' means buff everytime</li>  <li><code>replace</code>: only if jarr is not null, replace any buff to the same property and type.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p>Passing '' as first parameter is useful to just create mods.</p><p>Note that replace will not replace a specific mod when passing 'all' as a scope, but will replaceany mod with 'all' scope instead.</p><p>By passing <em>all</em> as a property, all queries to the same type will trigger this mod. Be carefulnot to add 'all' both as a property and a scope or the mod will be always applied.</p><p>Be careful when mixing mods and effects. queries may return bad results or replace the wrong mod.</p><h4>Returns</h4>the new mod or jarr.<h4>Examples</h4>+5 to Strength checks:<code>mods = mod.set(mods, 'Strength', 5, 'check')</code>-1 to anything using the Attack property:<code>mods = mod.set(mods, 'Attack', -1)</code>Just create a '+1 to Strength and Intelligence saves' mod:<code> mod = mod.set('', 'Strength, Intelligence', -1, 'save')</code>-1 To all checks:<code> mod = mod.set('', 'all', -1, 'check')</code></body></html>"},
-{
-"filename": "public/mod.setEffect.mts",
-"autoExecute": true,
-"description": "<html><h3>mod.setEffect</h3><p>Sets an effect on a token, enabling a state if necessary.</p><h4>Usage</h4><code>mod.setEffect(effect, value, property)mod.setEffect(effect, value, property, tokenID)mod.setEffect(effect, value, property, tokenID, map)</code><h4>Parameters</h4><ul><li><code>effect</code>: either a json effect object, a or a string with an existing effect on the token or an effect on the global database.</li><li><code>value</code>: either 1 (enable, default) or 0 (disable/remove);</li><li><code>property</code>: name of the property containing a json array for effects.</li><li><code>tokenID</code>: token to be effected with this state. defaults to current Token.</li><li><code>map</code>: map where the token is. defaults to current map.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p>This will automatically add or remove (depending on <em>value</em>) an effect to a property<em>property</em> inside a token.</p><p>Effect may be a custom effect (see effect.add) or a string for an existing effect.</p><p>This functions will check out if <em>effect</em> has a state bound to it, and will turn the effecton or off depending on <em>value</em>. the state will be set even if the property already conatins such effect.</p><h4>Returns</h4>Returns 1 if the operation was possibile (the effect wasn't present before adding or was present before removing)."},
-{
-"filename": "public/mod.setForceString.mts",
-"autoExecute": true,
-"description": "<html><h3>mod.setForceString</h3>sets if mod evaluations should return a formula or a number.<h4>Usage</h4><code>mod.setForceString(forceString)</code><h4>Parameters</h4><ul>\\t<li><code>forceString</code>: 1 if all macros should return a string, 0 otherwise. </li></ul><h4>Remarks</h4>This value may be set also in <code>mod.configure</code>."},
-{
-"filename": "public/mod.toString.mts",
-"autoExecute": true,
-"description": "<html><h3>mod.toString</h3>Turns a mod object into a human readable string.<h4>Usage</h4><code>mod.string(mod{})</code><h4>Parameters</h4><ul><li><code>mod</code>: a json mod object.</li></ul><h4>Returns</h4>A string."},
-{
-"filename": "public/mod.ui.bindScores.mts",
-"autoExecute": true,
-"description": "<html><h3>mod.ui.bindScores</h3>This function will call the <em>Score to table</em> bind editor.<h4>Usage</h4><code>mod.ui.bindScores()</code>"},
-{
-"filename": "public/mod.ui.edit.mts",
-"autoExecute": true,
-"description": "<html><h4>mod.ui.edit</h4><code>mod.ui.edit(mod)mod.ui.edit(jarr[])mod.ui.edit(jarr[], index)</code>Graphical editor for a mod.<h4>Parameters</h4><ul><li><code>mod</code>: name of a mod , a json mod object or an empty json object '{}'.</li><li><code>jarr</code>: an array containing any mods.</lil><li><code>index</code>: required with jarr, the index of the mod you intend to edit.</li></ul><h4>Remarks</h4>Setting a value of <b>0</b> will remove the mod from jarr.<h4>Returns</h4>if <code>mod</code> has been passed as an argument, it returns the new mod object. otherwise <code>jarr</code>is returned."},
-{
-"filename": "public/onCampaignLoad.mts",
-"autoExecute": true,
-"description": ""},
-{
-"filename": "public/onFirstInit.mts",
-"autoExecute": true,
-"description": "<html><b>This event is called by in add-on mode only.</b></html>"},
-{
-"filename": "public/onFirstInitialization.mts",
-"autoExecute": true,
-"description": "This internal macro resets the whole library."},
-{
-"filename": "public/onInit.mts",
-"autoExecute": true,
-"description": "<html><b>This event is called by in add-on mode only.</b></html>"},
-{
-"filename": "public/openDatabase.mts",
-"autoExecute": true,
-"description": "<html><h4>mod.openDB</h4><pre>mod.openDB()</pre>opens the database window."},
-{
-"filename": "public/openDatabaseUpdate.mts",
-"autoExecute": true,
-"description": ""},
-{
-"filename": "public/printCSS.mts",
-"autoExecute": true,
-"description": ""}
-]}
+  "properties": [
+    {
+      "filename": "public/Configure.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>Configure</h3><p>Opens the mod configuration panel.</p><h4>Usage</h4><code>mod.configure()</code><br/></body></html>"
+    },
+    {
+      "filename": "Edit buffs.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>Edit buffs</h3><p></p></body></html>"
+    },
+    {
+      "filename": "Effect Library.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>Effect Library</h3><p></p></body></html>"
+    },
+    {
+      "filename": "Effects.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>Effects</h3><p></p></body></html>"
+    },
+    {
+      "filename": "bindScores",
+      "autoExecute": true,
+      "description": "<html><body><h3>bindScores</h3><p>creates a bind between an attribute and a table, i.e. STR,WIS,DEX->attributes</p></body></html>"
+    },
+    {
+      "filename": "bindScoresUpdate",
+      "autoExecute": true,
+      "description": "<html><body><h3>bindScoresUpdate</h3><p></p></body></html>"
+    },
+    {
+      "filename": "public/effect.add.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>effect.add</h3><p>Stores into <code>jarr</code> a new effect, either retrieving it from the global database orby creating from scratch.</p><h4>Usage</h4><code>effect.add(jarr[], fx)</code><br/><code>effect.add(jarr[], fx, replace=0)</code><br/><h4>Parameters</h4><ul><li><code>jarr[]</code> : a json array where the object will be stored.</li><li><code>fx</code> : either a string for the effect name or an effect json object to be added.</li><li><code>replace</code> : if true (1), macro will replace any effect with a similar effect inside <code>jarr</code>. The effect will be stacked otherwise.</li></ul><h4>Remarks</h4><p>This is most useful as a quick way to add fxes from the database. however, json.path search is case-sensitive, so <code>bless</code> is different from <code>Bless</code>. Same goes for any properties.</p><p>The name property is used to look inside the general DB when <code>effects</code> is not set.</p><h4>Returns</h4><p>The expanded <code>jarr</code> array.</p></body></html>"
+    },
+    {
+      "filename": "public/effect.asReference.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>effect.asReference</h3><p>A wrap-up to create an <i>effect reference</i> to a global effect. This ensures object integrity.</p><h4>Usage</h4><code>effect.asReference(fxName)</code><br/><h4>Parameters</h4><ul><li><code>fxName</code> : name of the global effect.</li></ul><h4>Remarks</h4><p>This creates an effect reference to a global effect instead of a real effect, meaning the array must be resolved againt references before retrieving all mods. this is done automatically by <code>mod.get</code>, see <code>effect.resolve</code> for more info.</p><p>json path search is case-sensitive, so <code>bless</code> is different from <code>Bless</code>. Same for any properties.</p><h4>Returns</h4><p>a json <i>Effect reference</i> object.</p></body></html>"
+    },
+    {
+      "filename": "public/effect.contains.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>effect.contains</h3><p><html><h3>effect.contains</h3>Utility to check if an effect is inside a json narray.<h4>Usage</h4><code>  effect.contains(jarr, effectName)</code><h4>Parameters</h4><ul><li><code>jarr</code>: a valid json array</li><li><code>effect</code>: either a json effect object, a or a string with an existing effect on the token or an effect on the global database.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><h4>Returns</h4>1 if the effect is present, 0 otherwise.</p></body></html>"
+    },
+    {
+      "filename": "public/effect.get.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>effect.get</h3><p><html><h3>effect.get</h3><p>Returns a json list of effects matching <code>name</code>.\\tIf an effect has multiple entries, all entries are returned.</p><h4>Usage</h4><code>\\teffect.get(name)\\teffect.get(name, index = -1)\\teffect.get(name, index = -1, jarr[])</code><h4>Parameters</h4><ul>\\t<li><code>name</code>: effect name.</li>\\t<li><code>index</code>: which effect from the list. defaults to -1, which means the whole array will be returned. Set it to 0 to avoid returning an array when\\tyou are sure only one effect is present (for example, when querying the database).</li>  <li><code>jarr</code>: array where to look up for <code>name</code>. If not specified, the global DB is searched instead.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.<p>Despite being called effect.get, this returns a json array, even if a single instance is found. If you are sureonly one index is present, always set index to 0.</p>Same for any properties.</p><h4>Returns</h4><p>a json array with all the effects returned.</p></p></body></html>"
+    },
+    {
+      "filename": "public/effect.group.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>effect.group</h3><p><html><h3>effect.group</h3><p>Searches all effects in jarr[] or the global database belonging to the same group.</p><h4>Usage</h4><code>\\teffect.get(name)\\teffect.get(name, jarr[])</code><h4>Parameters</h4><ul>\\t<li><code>name</code>: one or more group name(s), as a comma-separated list.</li>\\t<li><code>jarr </code>: array where to look up for <code>name</code>. If not specified, the global DB is searched instead.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><h4>Returns</h4><p>a json array with all the effects returned.</p></p></body></html>"
+    },
+    {
+      "filename": "public/effect.new.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>effect.new</h3><p><html><h3>effect.new</h3>Creates a new effect json object.<h4>Usage</h4><code>effect.new(name)effect.new(name, state)effect.new(name, state, effects[], group)</code><h4>Parameters</h4><ul>\\t<li><code>name</code>: Effect name. </li>\\t<li><code>state</code>: State to be bind to the effect. Empty string ('') for no state.</li>\\t<li><code>effects</code>: a json array containing <em>mods</em> to be bound to the effect. Valid options are a json array, a single json mod object, or an empty string.</li>\\t<li><code>group</code>: a string for the effect's group.</li></ul><h4>Remarks</h4>While this is a simple call to json.set, it is to be preferred to raw jsonobject handling as this can be used to easily expand effects, by overridingthe function with <code>defineFunction()</code>.<h4>Returns</h4>a new json effect object .</p></body></html>"
+    },
+    {
+      "filename": "public/effect.remove.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>effect.remove</h3><p><html><h3>effect.remove</h3>Removes an effect from an array or a token. Note that this will remove ALL effects with that name.<h4>Usage</h4><code>effect.remove(jarr, fxname)effect.remove(property, fxname, tokenID, mapID)</code><h4>Parameters</h4><ul>  <li><code>jarr[]</code>: a json array containing effects.</li>  <li><code>property</code>:  name of the proprerty containing a json array.</li>  <li><code>tokenID</code>: (optional) name of the token containing <code>property</code>.</li>  <li><code>mapID</code>: (optional) name of the map containing <code>tokenID</code>.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p>The first form will simply remove an effect using jsonpath. The second form, which requires <code>tokenID</code>,will update the property and disable any effect bound to the effect.</p><h4>Returns</h4>modified <code>jarr</code>.</p></body></html>"
+    },
+    {
+      "filename": "public/effect.resolve.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>effect.resolve</h3><p><html><h3>Effect.resolve</h3>Turns any <i>effect reference</i> into a full effect json object.<code>effect.resolve(jarr)effect.resolve(jarr, database = '')effect.resolve(reference)effect.resolve(reference, database = '')</code><h4>Parameters</h4><ul>  <li><code>jarray</code>: if the first parameter is a valid json mod/fx array, the whole array will be resolved;</li>  <li><code>reference</code>: if the first paramater is a valid effect reference json object, only that object will be resolved.</li>  <li><code>database</code>: optional, the database to use for reference resolution, if '' it will be the global database.</li></ul><h4>Remarks</h4><p>This function is called automatically by mod.get but may be called by any functions that requires a full parse-able db.</p><p>This function should be called only if you are using <i>effect references</i>, otherwise it is meaningless. Any resolved reference is stored locally and won't respond to global database changes anymore.<h4>Returns</h4><p>A json array with all references turned into a full effect object.</p></p></body></html>"
+    },
+    {
+      "filename": "public/effect.toString.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>effect.toString</h3><p><html><h3>effect.toString</h3>A simple utility to call effect parsing<h4>Usage</h4><code>effect.toString(effectName)effect.toString(effectName, delim)effect.toString(effectObject)effect.toString(effectObject, delim)effect.toString(contents[])effect.toString(contents[],delim)</code><h4>Parameters</h4><ul><li><code>effectName</code>: an effect from the library.</li><li><code>effectObject</code>: an effect (non reference) object.</li><li><code>contents</code>: a json array containing mod objects.</li><li><code>delim</code>: as in list functions. Defaults to ';'.</li></ul><h4>Remarks</h4>Commas (,) are used by <code>mod.toString</code>, so dot comma (;) is used instead.<h4>Returns</h4>A string list with all the mods issued as a string list.</p></body></html>"
+    },
+    {
+      "filename": "public/effect.ui.manage.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>effect.ui.manage</h3><p><html><h3>mod.ui.manage</h3><p>Opens a GUI editor to manage mods.</o><p>If no token is opened, the global library is opened instead (GM Only).</p><code>effect.ui.manage()effect.ui.manage(tok, prop, title='Effect Manager', access='auto', group)</code><h4>Parameters</h4><ul>\\t<li><code>tok</code>: a string list (,) of tokens.</li>\\t<li><code>prop</code>: only when parameter 0 is <em>tok</em>, the property to read. The property must be a valid json array.</li> \\t<li><code>title</code>: when specified, allows customization of the tile.</li>\\t<li><code>access</code>: Access clearance. see remarks. default value is 'auto', which is 'full' for gms and 'view-only' for players.</li>\\t<li><code>group</code>: only when access is <em>add-group</em>, a comma-separated list of groups to show.</li></ul><h4>Remarks</h4><p>This GUI will prevent any unauthorized access to token properties. GM may edit any token, but any unowned token from <code>tok</code> will be stripped.</p><p>The macro will silently quit if no vald tokens remain on the list.the GUI may be customized with CSS (see <code>mod.configure</code>)</p>Access mode allows user to define how much control on the gui is shown:<ul><li><code>view-only</code>: default for players, allows no modification.</li><li><code>add-group</code>: allows add and remove from a specific group. <code>group</code> parameter must be specified.</li><li><code>add-all</code>: allows add and remove from any group. </li><li><code>full</code>: allows full control, including customization &amp; edit</li>.</ul></p></body></html>"
+    },
+    {
+      "filename": "effectEditor",
+      "autoExecute": true,
+      "description": "<html><body><h3>effectEditor</h3><p><html>Effect editor GUI.arguments must be passed as json object.<pre>{\\ttokenID : '##lib##' for library, or token List\\tproperty: if tokenID is a token, property must be defined\\teffect : valid effect object\\tdisableName : disable name change (remove key to enable)\\treplaces : original effect name (db only)\\tname : current effect name\\tcustomMacro: custom macro to be called upon completition.}</pre><h3>Remarks</h3>If <code>customLink</code> is passed through, macro will be called after input validation.see <code>effectEditorUpdate</code> macro for some info. macro must be in the 'macro@position' format, regular string, no link. a json object will be passed as value, containing the <code>effect</code> property with the filtered, final effect.</p></body></html>"
+    },
+    {
+      "filename": "effectEditorUpdate",
+      "autoExecute": true,
+      "description": "<html><body><h3>effectEditorUpdate</h3><p></p></body></html>"
+    },
+    {
+      "filename": "effectLibraryUpdate",
+      "autoExecute": true,
+      "description": "<html><body><h3>effectLibraryUpdate</h3><p></p></body></html>"
+    },
+    {
+      "filename": "effectsLibrary",
+      "autoExecute": true,
+      "description": "<html><body><h3>effectsLibrary</h3><p></p></body></html>"
+    },
+    {
+      "filename": "effectsLibraryNew",
+      "autoExecute": true,
+      "description": "<html><body><h3>effectsLibraryNew</h3><p></p></body></html>"
+    },
+    {
+      "filename": "effectsTokenManager",
+      "autoExecute": true,
+      "description": "<html><body><h3>effectsTokenManager</h3><p><html>json object for parameters.<code>{\\ttokenID : empty, '##renew##' or a token string list\\tproperty: property containing a valid json array\\ttitle : title of the dialog}</code></p></body></html>"
+    },
+    {
+      "filename": "etmUpdate",
+      "autoExecute": true,
+      "description": "<html><body><h3>etmUpdate</h3><p></p></body></html>"
+    },
+    {
+      "filename": "public/getModProperty.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>getModProperty</h3><p><html><h3>getModProperty</h3>Returns a property value or property expression using the default mod property.<h4>Usage</h4><code>mod.getProperty(property, scope)</code><code>mod.getProperty(property, scope, token)</code><code>mod.getProperty(property, token, map)</code><h4>Parameters</h4><ul><li><code>property</code>: name of the property that you want to retrieve. beware of case-sensitiveness.</code></li><li><code>scope</code>: the context you need this mod, i.e. check or save. Defaults to <i>all</i>.</li><li><code>token</code>: Token id. Defaults to <code>currentToken()</code>.</li><li><code>map</code>: Map id. Defaults to <code>getCurrentMapName()</code>.</li></ul><h4>Remarks</h4><p>Much like <code>mod.getProperty</code>, this macro will return a numeric value if the result mod is a mathematical expressionand <code>forceString</code> is set to <b>0</b>.</p><h4>Returns</h4>The modified value or a string expression to be evaluated.</p></body></html>"
+    },
+    {
+      "filename": "public/getScore.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>getScore</h3><p><html><body><h3>getScore</h3><p>Modifies a pure attribute score (as in d20's 3-18 attributes) and returns the roll modifier from the appropriate table.</p><h4>Usage</h4><code>getScore(property)getScore(property, tokenID)getScore(property, tokenID, mapID)</code><h4>Parameters</h4><ul>  <li><code>property</code>: the <b>name</b> of the attribute score property.</li>  <li><code>tokenID</code>: target token. defaults to <code>currentToken</code>.</li>  <li><code>mapID</code>: target token map. defaults to <code>getCurrentMapName</code>.</li></ul><h4>Remarks</h4><p>for this function to work you need to check out <code>mod.ui.bindScores</code>.</p><p>Scores, like table keys, should be numeric only in nature <br/>- a string modifier will result in an error.</p><h4>Returns</h4><p>Either a modified score or the original attribute value. if Any mod resulting in a string instead of a number will return a string with all mods.</p><h4>See also</h4><code>mod.getScore</code></body></html></p></body></html>"
+    },
+    {
+      "filename": "public/isMod.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>isMod</h3><p>Similar to json.type, returns a number detecting mod type.</p><h4>Usage</h4><code>isMod(object)</code><br/><h4>Parameters</h4><ul><li><code>object</code> : a json entity to be tested.</li></ul><h4>Returns</h4><p>returns 1 if the object is a mod, 0 if it is an effect, -1 otherwise.</p></body></html>"
+    },
+    {
+      "filename": "json.getSafe",
+      "autoExecute": true,
+      "description": "<html><body><h3>json.getSafe</h3><p>json.getSafe(value, type)returns an empty array or object if value is not of type.</p></body></html>"
+    },
+    {
+      "filename": "public/mod.eval.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.eval</h3><p>tries to replace any property inside <code>expression</code> that belongs to <code>token</code>.</p><h4>Usage</h4><code>mod.eval(expression, mod[], scope)</code><br/><code>mod.eval(expression, modProperty, scope)</code><br/><code>mod.eval(expression, modProperty, scope, token)</code><br/><code>mod.eval(expression, modProperty, scope, token, map)</code><br/><h4>Remarks</h4><p>properties should be numerical, unless the string only mode is forced by configuration.</p><p>since this macro evaluates <b>all</b> properties of a token, it may be time consuming.</p><h4>Returns</h4><p>the result of the eval expression</p><h4>Examples</h4><p>mod.eval('1d20+Level', 'mods', 'all') becomes 1d20+getModProperty('Level', 'all'), then is evaluated. Assuming token has a +5 buff to its <i>Level</i> property, it would become <code>eval('1d20+5')</code>.</p></body></html>"
+    },
+    {
+      "filename": "public/mod.get.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.get</h3><p><html><body><h3>mod.get</h3><p>Returns the current modifier for a property or id inside a mod array.</p><h4>Usage</h4><code>  mod.get(jarr[], name)  mod.get(jarr[], name, type)  mod.get(jarr[], name, type='all', otherwise=0, optimize=0)</code><h4>Parameters</h4><ul>  <li><code> jarr </code>: the arry to look into</li>  <li><code> name </code>: property or score nome</li>  <li><code> type </code>: list separated by comma (,) of all requested roll types. Use 'all' for global scope properties.</li>  <li><code> otherwise </code>: value to return if no mods is found</li>  <li><code>optimize</code>: by passing 1, this will consider <code>jarr</code> as it was already called from a <code>getElements()</code> query. This is used internally to avoid resolving and filtering multiple times.</li></ul><h4>Remarks</h4><p>As of 1.1.0, <code>mod.get</code> will return a unparsed string if any non mathematical sign is found.</p><p>This will return the operators (* and /) first, and any other value then. Any other type of mod (i.e. value forcing) will be ignored as this is supposed to return any <i>buff</i>.</p><h4>Returns</h4>  <p>A number or a string expression with all the mods found or the original value.</p><h4>Examples</h4>Find from jarr any bonus/malus to fear saving throws:  <code>mod = mod.get(jarr, 'fear', 'save', 0)</code>Find any bonus to thac0:  <code>mod = mod.get(jarr, 'thac0', 'all', 0)</code></body></html></p></body></html>"
+    },
+    {
+      "filename": "public/mod.getElements.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.getElements</h3><p><html><body><h3>mod.getElements</h3><p><small>Introduced in 1.1.0</small></p><p>Gets the current mod json objects from <code>jarr[]</code>. an empty array is returned by default is no mod is present./<p><h4>Usage</h4><code>mod.getElements(jarr[], name,type='all')</code><h4>Parameters</h4><ul><li><code><code>jarr</code></code>: the arry to look into</li><li><code> name </code>: property or score nome</li><li><code> type </code>: list separated by comma (,) of all requested roll types. Use 'all' for global scope properties.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p>This macro is useful if you plan to do multiple searches using active effects, as it reduces the effect array size.</p><h4>Returns</h4><p>A json array with all mod objects matching the query.</p></body></html></p></body></html>"
+    },
+    {
+      "filename": "public/mod.getInterfaceProperty.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.getInterfaceProperty</h3><p><html><h3>mod.getInterfaceProperty</h3>Returns the property name for the mods as set in <code>mod.configure</code>.<h4>Returns</h4>The name of the property.</p></body></html>"
+    },
+    {
+      "filename": "public/mod.getProperty.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.getProperty</h3><p><html><h3>mod.getProperty</h3><p>Returns a property with all modifications applied. Unlike <code>mod.get</code> this will take value forcing into account.</p><h4>Usage</h4><code>  mod.getProperty(name, modProperty, scope)  mod.getProperty(name, jarr[], scope)    mod.getProperty(name, modProperty, scope, tokenID, mapID)  mod.getProperty(name, jarr[], scope, tokenID, mapID)</code><h4>Parameters</h4><ul>  <li><code>name</code>: name of the property to be looked upon.</li>  <li><code>modProperty</code>: Property containing a json array from a token.</li>  <li><code>jarr[]</code>: a json array which will be used instead of <code>modProperty</code>.</li>  <li><code>scope</code>:may be any scope, 'all' will search for all modifiers bound to that property.</li>  <li><code>tokenID</code>: target token. defaults to <code>currentToken</code>.</li>  <li><code>mapID</code>: target token map. defaults to <code>getCurrentMapName</code>.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p><code>mod.getProperty</code> will first attemp to handle the property as a score. So, strength will be turned into a modifier, armor class will not. Then, he tries to apply any forcing to the value. The forcing algorithm may be defined using <code>mod.configure()</code>. Then any other mods are applied.<p>If the value of <code>property</code> is a string, no score translation will be attempted.</p><h4>Returns</h4><p>Either a numeric value or a string representing all mods.</p><p>If any mod or forcing is non numerical or an operation, a string is returned.</p></p></body></html>"
+    },
+    {
+      "filename": "public/mod.getScore.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.getScore</h3><p><html><body><h3>mod.getScore</h3><p>Modifies a pure attribute score (as in d20's 3-18 attributes) and returns the roll modifier from theappropriate table.</p><h4>Usage</h4><code>mod.getScore(property)mod.getScore(property,attributeMods[])mod.getScore(property,attributeModProperty, tokenID, mapID)</code><h4>Parameters</h4><ul>  <li><code>property</code>: the <b>name</b> of the attribute score property.</li>  <li><code>attributeModProperty </code>: name of the property containing mods. Pass empty string to avoid ('').</li>  <li><code>attributeMods[] </code>: external json array containing mods. Pass empty string to avoid ('').</li>  <li><code>tokenID</code>: target token. defaults to <code>currentToken</code>.</li>  <li><code>mapID</code>: target token map. defaults to <code>getCurrentMapName</code>.</li></ul><h4>Remarks</h4><p>for this function to work you need to check out <code>mod.ui.bindScores</code>.</p><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>. Same goes for any property.</p><p>Passing a mod array will call <b>mod.get</b> with the <em>score</em>type, so you do not need to manually call it. </p><p>Scores, like table keys, should be numeric only in nature <br/>- a string modifier will result in an error.</p><h4>Returns</h4><p>Either a modified score or the original attribute value. if Any mod resulting in a string instead of a number will return a string with all mods.</p><h4>Examples</h4>Let's assume you have bound the Strength property to a 3.5 table, so 12=>+1, 18=>+3.<code>[h: setProperty('STR', 18)][r: mod.getScore('STR')]</code>will return 3.Get the STR modifier, use the 'mods' property:<code>mod.getScore('STR', mods)</code></body></html></p></body></html>"
+    },
+    {
+      "filename": "mod.pvt.getAvailableStates",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.pvt.getAvailableStates</h3><p><html><body><h3>mod.pvt.getAvailableStates</h3><p>Returns a list of available states, grabbed from <code>getInfo</code>.</p><h4>Returns</h4>A comma separated string list.</body><html></p></body></html>"
+    },
+    {
+      "filename": "mod.pvt.returnExpression",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.pvt.returnExpression</h3><p>returns expression</p></body></html>"
+    },
+    {
+      "filename": "public/mod.sanitizeExpression.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.sanitizeExpression</h3><p>cleans any bad operands or orphan operands from a dice expression</p><h4>Usage</h4><code>mod.sanitizeExpression(expression)</code><br/><h4>Parameters</h4><ul><li><code>expression</code> : a dice expression or any basic mathematical expression</li></ul><h4>Returns</h4><p>the sanitized expression string</p></body></html>"
+    },
+    {
+      "filename": "public/mod.set.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.set</h3><p><html><body><h3>mod.set</h3>Create a new mod object inside a mod array.<h4>Usage</h4><code>  mod.set('', properties, value)  mod.set('', properties, value, scope, replace)  mod.set(jarr[], properties, value)\\tmod.set(jarr[], properties, value, scope, replace)</code><h4>Parameters</h4><ul>  <li><code>jarr[]</code>: a json array with other mods. if null (''), the plain object will be returned.</li>  <li><code>properties</code>: a <b>list (comma-separated)</b> containing property names to be buffed. The special keyword 'all' will affectanything of the type.</li>  <li><code>value</code>: a numeric value different from 0.</li>  <li><code>scope</code>: use this to force specific buffs, such as 'check' or 'save'. keyword 'all' means buff everytime</li>  <li><code>replace</code>: only if jarr is not null, replace any buff to the same property and type.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p>Passing '' as first parameter is useful to just create mods.</p><p>Note that replace will not replace a specific mod when passing 'all' as a scope, but will replaceany mod with 'all' scope instead.</p><p>By passing <em>all</em> as a property, all queries to the same type will trigger this mod. Be carefulnot to add 'all' both as a property and a scope or the mod will be always applied.</p><p>Be careful when mixing mods and effects. queries may return bad results or replace the wrong mod.</p><h4>Returns</h4>the new mod or jarr.<h4>Examples</h4>+5 to Strength checks:<code>mods = mod.set(mods, 'Strength', 5, 'check')</code>-1 to anything using the Attack property:<code>mods = mod.set(mods, 'Attack', -1)</code>Just create a '+1 to Strength and Intelligence saves' mod:<code> mod = mod.set('', 'Strength, Intelligence', -1, 'save')</code>-1 To all checks:<code> mod = mod.set('', 'all', -1, 'check')</code></body></html></p></body></html>"
+    },
+    {
+      "filename": "public/mod.setEffect.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.setEffect</h3><p><html><h3>mod.setEffect</h3><p>Sets an effect on a token, enabling a state if necessary.</p><h4>Usage</h4><code>mod.setEffect(effect, value, property)mod.setEffect(effect, value, property, tokenID)mod.setEffect(effect, value, property, tokenID, map)</code><h4>Parameters</h4><ul><li><code>effect</code>: either a json effect object, a or a string with an existing effect on the token or an effect on the global database.</li><li><code>value</code>: either 1 (enable, default) or 0 (disable/remove);</li><li><code>property</code>: name of the property containing a json array for effects.</li><li><code>tokenID</code>: token to be effected with this state. defaults to current Token.</li><li><code>map</code>: map where the token is. defaults to current map.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p>This will automatically add or remove (depending on <em>value</em>) an effect to a property<em>property</em> inside a token.</p><p>Effect may be a custom effect (see effect.add) or a string for an existing effect.</p><p>This functions will check out if <em>effect</em> has a state bound to it, and will turn the effecton or off depending on <em>value</em>. the state will be set even if the property already conatins such effect.</p><h4>Returns</h4>Returns 1 if the operation was possibile (the effect wasn't present before adding or was present before removing).</p></body></html>"
+    },
+    {
+      "filename": "public/mod.setForceString.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.setForceString</h3><p><html><h3>mod.setForceString</h3>sets if mod evaluations should return a formula or a number.<h4>Usage</h4><code>mod.setForceString(forceString)</code><h4>Parameters</h4><ul>\\t<li><code>forceString</code>: 1 if all macros should return a string, 0 otherwise. </li></ul><h4>Remarks</h4>This value may be set also in <code>mod.configure</code>.</p></body></html>"
+    },
+    {
+      "filename": "public/mod.toString.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.toString</h3><p><html><h3>mod.toString</h3>Turns a mod object into a human readable string.<h4>Usage</h4><code>mod.string(mod{})</code><h4>Parameters</h4><ul><li><code>mod</code>: a json mod object.</li></ul><h4>Returns</h4>A string.</p></body></html>"
+    },
+    {
+      "filename": "public/mod.ui.bindScores.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.ui.bindScores</h3><p><html><h3>mod.ui.bindScores</h3>This function will call the <em>Score to table</em> bind editor.<h4>Usage</h4><code>mod.ui.bindScores()</code></p></body></html>"
+    },
+    {
+      "filename": "public/mod.ui.edit.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>mod.ui.edit</h3><p><html><h4>mod.ui.edit</h4><code>mod.ui.edit(mod)mod.ui.edit(jarr[])mod.ui.edit(jarr[], index)</code>Graphical editor for a mod.<h4>Parameters</h4><ul><li><code>mod</code>: name of a mod , a json mod object or an empty json object '{}'.</li><li><code>jarr</code>: an array containing any mods.</lil><li><code>index</code>: required with jarr, the index of the mod you intend to edit.</li></ul><h4>Remarks</h4>Setting a value of <b>0</b> will remove the mod from jarr.<h4>Returns</h4>if <code>mod</code> has been passed as an argument, it returns the new mod object. otherwise <code>jarr</code>is returned.</p></body></html>"
+    },
+    {
+      "filename": "onCampaignLoad.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>onCampaignLoad</h3><p></p></body></html>"
+    },
+    {
+      "filename": "public/onFirstInit.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>onFirstInit</h3><p><html><b>This event is called by in add-on mode only.</b></html></p></body></html>"
+    },
+    {
+      "filename": "public/onFirstInitialization.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>onFirstInitialization</h3><p>This internal macro resets the whole library.</p></body></html>"
+    },
+    {
+      "filename": "public/onInit.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>onInit</h3><p><html><b>This event is called by in add-on mode only.</b></html></p></body></html>"
+    },
+    {
+      "filename": "public/openDatabase.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>openDatabase</h3><p><html><h4>mod.openDB</h4><pre>mod.openDB()</pre>opens the database window.</p></body></html>"
+    },
+    {
+      "filename": "openDatabaseUpdate",
+      "autoExecute": true,
+      "description": "<html><body><h3>openDatabaseUpdate</h3><p></p></body></html>"
+    },
+    {
+      "filename": "printCSS",
+      "autoExecute": true,
+      "description": "<html><body><h3>printCSS</h3><p></p></body></html>"
+    },
+    {
+      "filename": "public/setEffect.mts",
+      "autoExecute": true,
+      "description": "<html><body><h3>setEffect</h3><p><html><h3>setEffect</h3><p>Sets an effect on a token, enabling a state if necessary.</p><h4>Usage</h4><code>setEffect(fx, value)setEffect(fx, value, token)setEffect(fx, value, token, map)</code><h4>Parameters</h4><ul><li><code>effect</code>: either a json effect object, a or a string with an existing effect on the token or an effect on the global database.</li><li><code>value</code>: either 1 (enable, default) or 0 (disable/remove);</li><li><code>tokenID</code>: token to be effected with this state. defaults to current Token.</li><li><code>map</code>: map where the token is. defaults to current map.</li></ul><h4>Remarks</h4><p>json path search is case-sensitive, so <em>bless</em> is different from <em>Bless</em>.Same for any properties.</p><p>This will automatically add or remove (depending on <em>value</em>) an effect to a property<em>property</em> inside a token.</p><p>Effect may be a custom effect (see effect.add) or a string for an existing effect.</p><p>This functions will check out if <em>effect</em> has a state bound to it, and will turn the effecton or off depending on <em>value</em>. the state will be set even if the property already conatins such effect.</p><h4>Returns</h4>Returns 1 if the operation was possibile (the effect wasn't present before adding or was present before removing).</p></body></html>"
+    }
+  ]
+}

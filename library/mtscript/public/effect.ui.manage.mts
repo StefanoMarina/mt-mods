@@ -4,7 +4,7 @@
 [h, if (argCount()>4): group = arg(4); group ="all")]
 
 [h, if (!argCount() && isGM()), code: {
-	[macro("effectsLibrary@this"): ""]	
+	[macro("effectsLibraryNew@this"): ""]	
 	[abort(0)]
 }]
 

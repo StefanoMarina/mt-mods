@@ -15,11 +15,8 @@
 	json.toList(operations, ""),
 	if (json.isEmpty(operations), "", "+"),
 	json.toList(pureValues, "+")
-	)]
-[h: exp = replace(exp, "\\+(\\-|\\+)", "\1")]
+)]
 
-[h, if (!getLibProperty("forceString") && matches (exp, "[\\{\\}\\[\\]\\(\\)\\d\\.\\+\\-]+")):
-	macro.return = eval (string(exp));
-	macro.return = string (exp)
-]
+[h: exp = replace(exp, "\\+(\\-|\\+)", "\$1")]
+[h: macro.return = mod.pvt.returnExpression(exp)]
 

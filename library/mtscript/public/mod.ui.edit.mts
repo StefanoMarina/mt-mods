@@ -94,7 +94,10 @@
 			json.set(mod, "property", modproperty, "type", modtype, "value", modvalue)
 		)]
 
+
 [h: return (argType == "ARRAY", mod)]
+
+[h: '<!-- if a specific index was set, return immediately-->']
 [h, if (requestType == "direct"):  return (0, json.set( argument, index, mod))]
 
 [h, if (action == "Add a new mod"):

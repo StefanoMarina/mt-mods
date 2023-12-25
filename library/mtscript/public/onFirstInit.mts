@@ -1,2 +1,2 @@
-[h, macro("onFirstInitialization@this"): ""]
-[macro("Configure@this"): ""]
+[h, macro("onFirstInitialization@"+getMacroLocation()): ""]
+[macro("Configure@"+getMacroLocation()"): ""]

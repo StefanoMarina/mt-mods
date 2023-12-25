@@ -8,7 +8,8 @@
 [h, if (json.type(modProperty) == "UNKNOWN"): modProperty = getProperty(modProperty, tokenID, map)]
 
 [h: '<!-- do not look for score if prop is not a number -->']
-[h, if (isNumber(prop)): 
+
+[h, if (isNumber(prop) && scope != "score"): 
 	scoreValue = mod.getScore(propName, modProperty, tokenID, map); 
 	scoreValue= prop
 ]
@@ -32,15 +33,4 @@
 
 [h: return (propMod != 0, scoreValue)]
 
-[h: stringExpression = strformat("%{scoreValue}%s%{propMod}",
-		if (!matches(propMod, "^[\\+\\-\\*\\/].*"),"+","")
-)]
-
-[h: return (!getLibProperty("forceString"), stringExpression)]
-
-[h: '<!-- evaluate expression -->']
-
-[h, if (matches (stringExpression,  "^[ \\{\\}\\[\\]\\(\\)\\d\\.\\+\\-\\*\\/]+\$")):
-	macro.return = eval(stringExpression);
-	macro.return = stringExpression
-]
+[h: macro.return = mod.pvt.returnExpression(scoreValue, propMod)]

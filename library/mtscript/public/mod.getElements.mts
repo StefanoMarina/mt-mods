@@ -9,9 +9,16 @@
 [h, if (listContains(modType, "all")): query= "@.type != 'score'"; query = "@.type in %{modList}"]
 [h: query= strformat(query)]
 
-[h: propQuery= strformat(".[?(@.property in ['all','%{modName}'] && %{query})]")]
+[h: '<!-- if mod type is "all", disable "all" for property name, otherwise everything is added -->']
+[h, if (modType == "all"): 
+	propertyQuery = "==  '%{modName}'";
+	propertyQuery = "in ['all','%{modName}']"
+]
+[h: propertyQuery = strformat(propertyQuery)]
+
+[h: query= strformat(".[?(@.property %{propertyQuery} && %{query})]")]
 
 [h: '<!- retrieve all valid mods -->']
-[h: propMods = json.path.read(jarr, "*"+propQuery, "ALWAYS_RETURN_LIST")]
-[h: fxMods = json.path.read(jarr, strformat("*.effects.*%{propQuery}"), "ALWAYS_RETURN_LIST")]
+[h: propMods = json.path.read(jarr, "*"+query, "ALWAYS_RETURN_LIST")]
+[h: fxMods = json.path.read(jarr, strformat("*.effects.*%{query}"), "ALWAYS_RETURN_LIST")]
 [h: macro.return = json.merge(propMods, fxMods)]
